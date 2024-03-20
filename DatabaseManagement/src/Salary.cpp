@@ -1,5 +1,5 @@
 #include "../include/Model/Salary.h"
-#include "../include/Regex.h"
+
 void Salary::userInputSalary() {
 
 	try {
@@ -14,7 +14,7 @@ void Salary::userInputSalary() {
 	}
 }
 
-void Salary::increment(double percentage, std::string id) {
+double Salary::increment(double percentage, std::string id) {
 	try {
 		double val = 0;
 		std::string query = "select amount from Salary where Sid = " + id + " ;";
@@ -32,16 +32,17 @@ void Salary::increment(double percentage, std::string id) {
 		val = (val + ((val * percentage) / 100));
 		amount = val;
 		setAmount(val);
-
+		return getAmount();
 		//std::cout << amount << "\n";
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return 0.0;
 	}
 }
 
-void Salary::viewSalary() {
+bool Salary::viewSalary() {
 	try {
 		system("cls");
 		std::string query = "select Employee.Eid , Employee.firstname , Employee.lastname , Employee.email , Salary.amount , Salary.base_salary , Salary.bonus from Employee JOIN Salary ON Employee.Eid = Salary.Sid where Sid =  ";
@@ -51,26 +52,30 @@ void Salary::viewSalary() {
 		query += tmp + " ;";
 		Database::getInstance().selectQuery(query.c_str());
 		waitMenu();
+		return true;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Salary::insertSalary(int id) const {
+bool Salary::insertSalary(int id) const {
 	try {
 		std::string query = "insert into Salary values(" + std::to_string(id) + " , " + std::to_string(getAmount()) + " , " + std::to_string(getBaseSalary()) + " ," + std::to_string(getBonus()) + ") ;";
 		std::cout << query;
 		Database::getInstance().executeQuery(query.c_str());
+		return true;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Salary::updateSalary() {
+bool Salary::updateSalary() {
 	try {
 		system("cls");
 		std::string query = "update Salary set ";
@@ -115,20 +120,18 @@ void Salary::updateSalary() {
 				i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-4]" }));
 				switch (i) {
 				case 0:
-					return;
+					return true;
 
 				case 1:
-					value = input("Enter Base Salary: ", salaryRegex);
-					setBaseSalary(std::stof(value));
+					setBaseSalary(std::stof(input("Enter Base Salary: ", salaryRegex)));
 					mp1.erase("base_salary");
-					mp1.insert({ "base_salary" , value });
+					mp1.insert({ "base_salary" , std::to_string(base_salary) });
 					break;
 
 				case 2:
-					value = input("Enter Bonus: ", salaryRegex);
-					setBonus(std::stof(value));
+					setBonus(std::stof(input("Enter Bonus: ", salaryRegex)));
 					mp1.erase("bonus");
-					mp1.insert({ "bonus" , value });
+					mp1.insert({ "bonus" , std::to_string(getBonus()) });
 					break;
 
 				case 3:
@@ -162,17 +165,19 @@ void Salary::updateSalary() {
 			if (rc == 0) {
 				std::cout << "Salary updated successfully\n\n";
 				waitMenu();
+				return true;
 			}
 		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Salary::deleteSalary() {
-
+bool Salary::deleteSalary() {
+	return true;
 }
 
 void Salary::action() noexcept {

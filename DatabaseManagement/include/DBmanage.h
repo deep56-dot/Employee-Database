@@ -22,11 +22,11 @@ class Database {
 public:
 	sqlite3* db{};
 	int rc{ 0 };
-	sqlite3_stmt* stmt {};
+	sqlite3_stmt* stmt{};
 	static int row;
 	bool open(const char* str);
 	bool close();
-	int executeQuery(const char* sql , float count = 0);
+	int executeQuery(const char* sql, float count = 0);
 	bool selectQuery(const char* sql);
 	static Database& getInstance() {
 		static Database db;

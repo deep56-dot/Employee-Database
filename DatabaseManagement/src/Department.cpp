@@ -1,4 +1,3 @@
-
 #include "../include/Model/Department.h"
 
 void Department::userInput() {
@@ -15,7 +14,7 @@ void Department::userInput() {
 	}
 }
 
-void Department::viewDepartment() {
+bool Department::viewDepartment() {
 	try {
 		system("cls");
 		std::string query = "select * from Department where ";
@@ -35,7 +34,7 @@ void Department::viewDepartment() {
 
 			switch (i) {
 			case 0:
-				return;
+				return true;
 				break;
 			case 1:
 				std::cout << "Enter Did: ";
@@ -69,20 +68,22 @@ void Department::viewDepartment() {
 		}
 
 		waitMenu();
+		return true;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Department::insertDepartment() {
+bool Department::insertDepartment() {
 	try {
 		system("cls");
 		std::cout << "If you want to go back press 0 Otherwise press 1\n";
 		int i;
 		if (i = std::stoi(input("", std::regex{ "^[0-1]$" }));  i == 0) {
-			return;
+			return true;
 		}
 
 		userInput();
@@ -94,20 +95,23 @@ void Department::insertDepartment() {
 		if (rc == 19) {
 			std::cout << "Entered manager is not available in partivular table \n\n";
 			waitMenu();
+			return false;
 		}
 		else if (rc == 0) {
 			std::cout << "Department added successfully \n\n";
 			waitMenu();
+			return true;
 		}
 		//std::cin >> query;     
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Department::updateDepartment() {
+bool Department::updateDepartment() {
 
 	try {
 		system("cls");
@@ -141,7 +145,7 @@ void Department::updateDepartment() {
 				i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-4]" }));
 				switch (i) {
 				case 0:
-					return;
+					return true;
 
 				case 1:
 					setName();
@@ -150,9 +154,9 @@ void Department::updateDepartment() {
 					break;
 
 				case 2:
-					value = input("Enter Department Id: ", idRegex);
+					setManagerId(std::stoi(input("Enter Manager ID Id: ", idRegex)));
 					mp.erase("manager_id");
-					mp.insert({ "manager_id" , value });
+					mp.insert({ "manager_id" , std::to_string(manager_id) });
 					break;
 
 				case 3:
@@ -189,20 +193,23 @@ void Department::updateDepartment() {
 			if (rc == 19) {
 				std::cerr << "You can not assigne value because entered manager is not in database \n\n";
 				waitMenu();
+				return false;
 			}
 			else if (rc == 0) {
 				std::cout << "Department Updated successfully \n\n";
 				waitMenu();
+				return true;
 			}
 		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Department::deleteDepartment() {
+bool Department::deleteDepartment() {
 
 	try {
 		system("cls");
@@ -218,7 +225,7 @@ void Department::deleteDepartment() {
 		while (1) {
 			switch (i) {
 			case 0:
-				return;
+				return true;
 
 			case 1:
 				std::cout << "Enter Did: ";
@@ -247,22 +254,26 @@ void Department::deleteDepartment() {
 			int change = sqlite3_changes(Database::getInstance().db);
 			if (change == 0) {
 				std::cout << "Selected Department is not in database\n";
+				return false;
 			}
 			else {
 
 				std::cout << "Department Deleted successfully \n\n";
+				return true;
 			}
 			waitMenu();
 		}
 		else if (rc == 19) {
 			std::cout << "You can not Delete this department because there is employee which are working in this department  \n\n";
 			waitMenu();
+			return false;
 		}
 
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 

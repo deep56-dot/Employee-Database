@@ -1,7 +1,7 @@
 #ifndef _Salary_
 #define _Salary_
-#include <iostream>
-#include <map>
+#include <iostream> 
+#include <map> 
 #include "../Helper.h"
 #include "../Regex.h"
 #include "../DBmanage.h"
@@ -24,12 +24,12 @@ public:
     void setBaseSalary(const double& bSalary) { base_salary = bSalary; }
     void setBonus(const double& figure) { bonus = figure; }
 
-    void viewSalary();
+    bool viewSalary();
     void userInputSalary();
-    void insertSalary(int id) const;
-    void increment(double, std::string);
-    void deleteSalary();
-    void updateSalary();
+    bool insertSalary(int id) const;
+    double increment(double, std::string);
+    bool deleteSalary();
+    bool updateSalary();
     void action() noexcept;
 
 private:

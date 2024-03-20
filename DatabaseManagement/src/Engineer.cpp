@@ -14,7 +14,7 @@ void Engineer::userInputEngineer() {
 	}
 }
 
-void Engineer::viewEngineer() {
+bool Engineer::viewEngineer() {
 	try {
 		system("cls");
 		std::string query1 = "SELECT * FROM Employee INNER JOIN Engineer ON Engineer.id = Employee.Eid and ";
@@ -35,7 +35,7 @@ void Engineer::viewEngineer() {
 		while (1) {
 			switch (i) {
 			case 0:
-				return;
+				return true;
 
 			case 1:
 				std::cout << "Enter Eid: ";
@@ -82,20 +82,22 @@ void Engineer::viewEngineer() {
 		}
 
 		waitMenu();
+		return true;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Engineer::insertEngineer() {
+bool Engineer::insertEngineer() {
 	try {
 		system("cls");
 		std::cout << "If you want to go back press 0 Otherwise press 1\n";
 		int i;
 		if (std::cin >> i;  i == 0) {
-			return;
+			return true;
 		}
 		userInputEngineer();
 
@@ -106,15 +108,22 @@ void Engineer::insertEngineer() {
 		if (rc == 0) {
 			std::cout << "Engineer Inserted successfully\n\n";
 			waitMenu();
+			return true;
+		}
+		else if (rc == 19) {
+			std::cout << "Entered Enginner is already exist\n\n";
+			waitMenu();
+			return false;
 		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Engineer::updateEngineer() {
+bool Engineer::updateEngineer() {
 	try {
 		system("cls");
 
@@ -159,70 +168,59 @@ void Engineer::updateEngineer() {
 				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-3]$" }));
 				switch (i) {
 				case 0:
-					return;
+					return true;
 
 				case 1:
-					value = input("Enter First Name: ", alphaRegex);
-					mp1.erase("firstname");
-					mp1.insert({ "firstname" , value });
+					setFirstname(input("Enter firstname: ", alphaRegex));
+					mp1.insert({ "firstname" , getFirstname() });
 					break;
 
 				case 2:
-					value = input("Enter Last Name: ", alphaRegex);
-					mp1.erase("lastname");
-					mp1.insert({ "lastname" , value });
+					setLastname(input("Enter LastName: ", alphaRegex));
+					mp1.insert({ "lastname" ,  getLastname() });
 					break;
 
 				case 3:
-					value = input("Enter Date Of Birth: ", dateRegex);
-					mp1.erase("dob");
-					mp1.insert({ "dob" , value });
+					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
+					mp1.insert({ "dob" , getDob() });
 					break;
 
 				case 4:
-					value = input("Enter Mobile: ", mobileRegex);
-					mp1.erase("mobile");
-					mp1.insert({ "mobile" , value });
+					setMobile(input("Enter Mobile: ", mobileRegex));
+					mp1.insert({ "mobile" , getMobile() });
 					break;
 
 				case 5:
-					value = input("Enter Email: ", emailRegex);
-					mp1.erase("email");
-					mp1.insert({ "email" , value });
+					setEmail(input("Enter Email: ", emailRegex));
+					mp1.insert({ "email" , getEmail() });
 					break;
 
 				case 6:
 					setAddress();
-					mp1.erase("address");
 					mp1.insert({ "address" , getAddress() });
 					break;
 
 				case 7:
 					value = input("Enter Gender (Male/Female/Other: )", genderRegex);
-					mp1.erase("gender");
 					mp1.insert({ "gender" , value });
 					break;
 
 				case 8:
-					value = input("Enter Date Of Joining: ", dateRegex);
-					mp1.erase("doj");
-					mp1.insert({ "doj" , value });
+					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					mp1.insert({ "doj" , getDoj() });
 					break;
-
 				case 9:
-					value = input("Enter Manager Id: ", idRegex);
-					mp1.erase("manager_id");
-					mp1.insert({ "manager_id" , value });
+					setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
+					mp1.insert({ "manager_id" , std::to_string(getManagerId()) });
 					break;
 
 				case 10:
-					value = input("Enter Department Id: ", idRegex);
-					mp1.erase("department_id");
-					mp1.insert({ "department_id" , value });
+					setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+					mp1.insert({ "department_id" , std::to_string(getDepartmentId()) });
 					break;
 
 				case 11:
-					value = input("Enter Programming Language: ");
+					setProgramming_language(input("Enter Programming Language: "));
 					mp2.erase("programming_language");
 					mp2.insert({ "programming_language" , value });
 					break;
@@ -281,27 +279,31 @@ void Engineer::updateEngineer() {
 			if (rc == 0) {
 				std::cout << "Engineer updated successfully\n\n";
 				waitMenu();
+				return true;
 			}
 			else if (rc == 19) {
 				std::cout << "You can not assign value beacuse entered manager or department is not in particular table\n\n";
 				waitMenu();
+				return false;
 			}
 		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Engineer::deleteEngineer() {
+bool Engineer::deleteEngineer() {
 	try {
 		system("cls");
-		deleteEmployee();
+		return deleteEmployee();
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 

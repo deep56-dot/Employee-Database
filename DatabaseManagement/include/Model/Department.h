@@ -25,13 +25,13 @@ public:
     }
 
     void setName() {
-        std::string desc; 
-        std::string msg = " Enter # to leave the field Empty\n"; 
-        std::cout << "Enter Department Name: " + msg; 
-        std::cin.ignore(); 
-        std::getline(std::cin , desc); 
-        if (desc == "#") desc = ""; 
-        Dname = desc; 
+        std::string desc;
+        std::string msg = " Enter # to leave the field Empty\n";
+        std::cout << "Enter Department Name: " + msg;
+        std::cin.ignore();
+        std::getline(std::cin, desc);
+        if (desc == "#") desc = "";
+        Dname = desc;
     }
 
     void setManagerId(const int& mId) {
@@ -48,18 +48,18 @@ public:
         description = desc;
     }
 
-    void viewDepartment();
-    void insertDepartment();
-    void deleteDepartment();
-    void updateDepartment();
+    bool viewDepartment();
+    bool insertDepartment();
+    bool deleteDepartment();
+    bool updateDepartment();
     void userInput();
     void action() noexcept;
 
 private:
 
-    int Did;
-    std::string Dname;
-    int manager_id;
-    std::string description;
+    int Did{};
+    std::string Dname{};
+    int manager_id{};
+    std::string description{};
 };
 #endif

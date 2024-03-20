@@ -2,6 +2,7 @@
 #define _Manager_
 
 #include "Employee.h"
+#include "../Helper.h"
 
 class Manager : public Employee {
 public:
@@ -20,19 +21,19 @@ public:
 
     void setManagementExperience(const int& yrs) { management_experience = yrs; }
     void setProjectTile() {
-        std::string desc; 
-        std::string msg = " Enter # to leave the field Empty\n"; 
-        std::cout << "Enter Project Title: " + msg; 
-        std::cin.ignore(); 
-        std::getline(std::cin, desc); 
-        if (desc == "#") desc = ""; 
-        project_title = desc; 
+        std::string desc;
+        std::string msg = " Enter # to leave the field Empty\n";
+        std::cout << "Enter Project Title: " + msg;
+        std::cin.ignore();
+        std::getline(std::cin, desc);
+        if (desc == "#") desc = "";
+        project_title = desc;
     }
 
-    void viewManager();
-    void insertManager();
-    void deleteManager();
-    void updateManager();
+    bool viewManager();
+    bool insertManager();
+    bool deleteManager();
+    bool updateManager();
     void userInputManager();
     void action() noexcept;
 

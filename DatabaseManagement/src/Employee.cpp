@@ -1,7 +1,6 @@
-
 #include "../include/Model/Employee.h"
 
-void Employee::viewEmployee() {
+bool Employee::viewEmployee() {
 
 	try {
 
@@ -22,7 +21,7 @@ void Employee::viewEmployee() {
 		while (1) {
 			switch (i) {
 			case 0:
-				return;
+				return true;
 
 			case 1:
 				std::cout << "Enter Eid: ";
@@ -66,15 +65,17 @@ void Employee::viewEmployee() {
 			}
 			break;
 		}
+		return true;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 
 }
 
-void Employee::insertEmployee() {
+bool Employee::insertEmployee() {
 	try {
 
 		std::string query = "INSERT INTO Employee "
@@ -91,24 +92,27 @@ void Employee::insertEmployee() {
 		}
 		query += "' , '" + doj + "', " + std::to_string(manager_id) + ", " + std::to_string(department_id) + "); ";
 
+		s.insertSalary(getId());
 		int rc = Database::getInstance().executeQuery(query.c_str());
 		if (rc == 0) {
 			std::cout << "Employee inserted successfully";
-
+			return true;
 		}
 		else if (rc == 19) {
 			std::cout << "Entered manager or department is not available in particular table\n\n";
 			waitMenu();
+			return false;
 		}
-		s.insertSalary(getId());
+		return true;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Employee::updateEmployee() {
+bool Employee::updateEmployee() {
 	try {
 		std::string query = "update Employee set ";
 		std::cout << "Enter the Eid to update Employee\n";
@@ -146,31 +150,31 @@ void Employee::updateEmployee() {
 				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-1]$" }));
 				switch (i) {
 				case 0:
-					return;
+					return true;
 
 				case 1:
-					value = input("Enter firstname: ", alphaRegex);
-					mp.insert({ "firstname" , value });
+					setFirstname(input("Enter firstname: ", alphaRegex));
+					mp.insert({ "firstname" , firstname });
 					break;
 
 				case 2:
-					value = input("Enter Lastname: ", alphaRegex);
-					mp.insert({ "lastname" , value });
+					setLastname(input("Enter LastName: ", alphaRegex));
+					mp.insert({ "lastname" ,  lastname });
 					break;
 
 				case 3:
-					value = input("Enter Date Of Birth: ", dateRegex);
-					mp.insert({ "dob" , value });
+					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
+					mp.insert({ "dob" , dob });
 					break;
 
 				case 4:
-					value = input("Enter Mobile: ", mobileRegex);
-					mp.insert({ "mobile" , value });
+					setMobile(input("Enter Mobile: ", mobileRegex));
+					mp.insert({ "mobile" , mobile });
 					break;
 
 				case 5:
-					value = input("Enter Email: ", emailRegex);
-					mp.insert({ "email" , value });
+					setEmail(input("Enter Email: ", emailRegex));
+					mp.insert({ "email" , email });
 					break;
 
 				case 6:
@@ -184,18 +188,18 @@ void Employee::updateEmployee() {
 					break;
 
 				case 8:
-					value = input("Enter Date Of Joining: ", dateRegex);
-					mp.insert({ "doj" , value });
+					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					mp.insert({ "doj" , doj });
 					break;
 
 				case 9:
-					value = input("Enter Manager Id: ", idRegex);
-					mp.insert({ "manager_id" , value });
+					setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
+					mp.insert({ "manager_id" , std::to_string(manager_id) });
 					break;
 
 				case 10:
-					value = input("Enter Department Id: ", idRegex);
-					mp.insert({ "department_id" , value });
+					setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+					mp.insert({ "department_id" , std::to_string(department_id) });
 					break;
 
 				case 11:
@@ -222,15 +226,17 @@ void Employee::updateEmployee() {
 			//std::cout << query << "\n";
 
 			int rc = Database::getInstance().executeQuery(query.c_str());
+			return true;
 		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Employee::deleteEmployee() {
+bool Employee::deleteEmployee() {
 	try {
 		system("cls");
 		std::string query1 = "delete from Employee where ";
@@ -249,7 +255,7 @@ void Employee::deleteEmployee() {
 		while (1) {
 			switch (i) {
 			case 0:
-				return;
+				return true;
 
 			case 1:
 				std::cout << "Enter Eid: ";
@@ -278,15 +284,19 @@ void Employee::deleteEmployee() {
 			int change = sqlite3_changes(Database::getInstance().db);
 			if (change == 0) {
 				std::cout << "Selected Employee is not in database\n";
+				waitMenu();
+				return false;
 			}
 			else {
 				std::cout << "Employee Deleted successfully\n\n";
+				waitMenu();
+				return true;
 			}
-			waitMenu();
 		}
 		else if (rc == 19) {
 			std::cout << "You can not delete this Employee because this is a manager of other employees \n\n";
 			waitMenu();
+			return false;
 		}
 
 
@@ -294,6 +304,7 @@ void Employee::deleteEmployee() {
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 

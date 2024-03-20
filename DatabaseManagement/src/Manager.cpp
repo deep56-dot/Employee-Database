@@ -1,4 +1,3 @@
-
 #include "../include/Model/Manager.h"
 
 void Manager::userInputManager() {
@@ -16,7 +15,7 @@ void Manager::userInputManager() {
 	}
 }
 
-void Manager::viewManager() {
+bool Manager::viewManager() {
 
 	try {
 		system("cls");
@@ -37,7 +36,7 @@ void Manager::viewManager() {
 		while (1) {
 			switch (i) {
 			case 0:
-				return;
+				return true;
 
 			case 1:
 				std::cout << "Enter Mid: ";
@@ -82,20 +81,22 @@ void Manager::viewManager() {
 			int rc = Database::getInstance().selectQuery(query1.c_str());
 		}
 		waitMenu();
+		return true;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Manager::insertManager() {
+bool Manager::insertManager() {
 	try {
 		system("cls");
 		std::cout << "If you want to go back press 0 Otherwise press 1\n";
 		int i;
 		if (std::cin >> i;  i == 0) {
-			return;
+			return true;
 		}
 		userInputManager();
 
@@ -107,15 +108,22 @@ void Manager::insertManager() {
 		if (rc == 0) {
 			std::cout << "Manager inserted successfully\n\n";
 			waitMenu();
+			return true;
+		}
+		else if (rc == 19) {
+			std::cout << "Entered Manager is already exist\n\n";
+			waitMenu();
+			return false;
 		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Manager::updateManager() {
+bool Manager::updateManager() {
 
 	try {
 		system("cls");
@@ -160,66 +168,56 @@ void Manager::updateManager() {
 				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-3]$" }));
 				switch (i) {
 				case 0:
-					return;
+					return true;
 
 				case 1:
-					value = input("Enter First Name: ", alphaRegex);
-					mp1.erase("firstname");
-					mp1.insert({ "firstname" , value });
+					setFirstname(input("Enter firstname: ", alphaRegex));
+					mp1.insert({ "firstname" , getFirstname() });
 					break;
 
 				case 2:
-					value = input("Enter Last Name: ", alphaRegex);
-					mp1.erase("lastname");
-					mp1.insert({ "lastname" , value });
+					setLastname(input("Enter LastName: ", alphaRegex));
+					mp1.insert({ "lastname" ,  getLastname() });
 					break;
 
 				case 3:
-					value = input("Enter Date Of Birth: ", dateRegex);
-					mp1.erase("dob");
-					mp1.insert({ "dob" , value });
+					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
+					mp1.insert({ "dob" , getDob() });
 					break;
 
 				case 4:
-					value = input("Enter Mobile: ", mobileRegex);
-					mp1.erase("mobile");
-					mp1.insert({ "mobile" , value });
+					setMobile(input("Enter Mobile: ", mobileRegex));
+					mp1.insert({ "mobile" , getMobile() });
 					break;
 
 				case 5:
-					value = input("Enter Email: ", emailRegex);
-					mp1.erase("email");
-					mp1.insert({ "email" , value });
+					setEmail(input("Enter Email: ", emailRegex));
+					mp1.insert({ "email" , getEmail() });
 					break;
 
 				case 6:
 					setAddress();
-					mp1.erase("address");
 					mp1.insert({ "address" , getAddress() });
 					break;
 
 				case 7:
 					value = input("Enter Gender (Male/Female/Other: )", genderRegex);
-					mp1.erase("gender");
 					mp1.insert({ "gender" , value });
 					break;
 
 				case 8:
-					value = input("Enter Date Of Joinning: ", dateRegex);
-					mp1.erase("doj");
-					mp1.insert({ "doj" , value });
+					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					mp1.insert({ "doj" , getDoj() });
 					break;
 
 				case 9:
-					value = input("Enter ManagerId: ", idRegex);
-					mp1.erase("manager_id");
-					mp1.insert({ "manager_id" , value });
+					setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
+					mp1.insert({ "manager_id" , std::to_string(getManagerId()) });
 					break;
 
 				case 10:
-					value = input("Enter Department Id: ", idRegex);
-					mp1.erase("department_id");
-					mp1.insert({ "department_id" , value });
+					setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+					mp1.insert({ "department_id" , std::to_string(getDepartmentId()) });
 					break;
 
 				case 11:
@@ -229,9 +227,9 @@ void Manager::updateManager() {
 					break;
 
 				case 12:
-					value = input("Enter Management experience: ");
+					setManagementExperience(std::stoi(input("Enter Management experience: ")));
 					mp2.erase("management_experience");
-					mp2.insert({ "management_experience" , value });
+					mp2.insert({ "management_experience" , std::to_string(getManagementExperience()) });
 					break;
 
 				case 13:
@@ -288,28 +286,32 @@ void Manager::updateManager() {
 			if (rc == 0) {
 				std::cout << "Manager updated successfully\n\n";
 				waitMenu();
+				return true;
 			}
 			else if (rc == 19) {
 				std::cout << "You can not update that value Because entered manager or department is not in particular table\n\n";
 				waitMenu();
+				return false;
 			}
 		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 
-void Manager::deleteManager() {
+bool Manager::deleteManager() {
 
 	try {
 		system("cls");
-		deleteEmployee();
+		return deleteEmployee();
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return false;
 	}
 }
 

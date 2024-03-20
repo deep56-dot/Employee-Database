@@ -6,10 +6,11 @@
 void menu();
 
 int main() {
-	Database::getInstance().open("Emp.db");
+	Database::getInstance().open("employee.db");
 	auto ch{ true };
 	while (ch) {
 		system("cls");
+		std::cout << "------------------------------------> WELCOME TO EMPLOYEE MANAGEMENT SYSTEM <-------------------------------------------\n";
 		std::cout << "Enter the Opertaion you want to perform\n";
 		std::cout << "1. Create Tables\n";
 		std::cout << "2. Show Tables\n";

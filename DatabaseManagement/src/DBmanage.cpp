@@ -1,4 +1,3 @@
-
 #include "../include/DBmanage.h"
 
 int Database::row = 0;

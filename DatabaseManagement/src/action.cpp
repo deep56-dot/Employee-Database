@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void action(int j) {
+void action(int j) noexcept {
 	auto check{ true };
 	while (check) {
 		system("cls");
