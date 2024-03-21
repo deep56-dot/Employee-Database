@@ -80,6 +80,9 @@ bool Manager::viewManager() {
 		if (i != 4 && i != 6) {
 			int rc = Database::getInstance().selectQuery(query1.c_str());
 		}
+		if (Database::row == 0) {
+			return false;
+		}
 		waitMenu();
 		return true;
 	}
@@ -100,21 +103,26 @@ bool Manager::insertManager() {
 		}
 		userInputManager();
 
-		insertEmployee();
-		std::string query = "";
-		query += "INSERT INTO Manager VALUES ( " + to_string(getId()) + ", " + std::to_string(getManagementExperience()) + " , ' " + getProjectTitle() + " ') ;";
-		//std::cout << query << "\n";
-		int rc = Database::getInstance().executeQuery(query.c_str());
-		if (rc == 0) {
-			std::cout << "Manager inserted successfully\n\n";
-			waitMenu();
-			return true;
+		if (auto ch = insertEmployee(); ch) {
+			std::string query = "";
+			query += "INSERT INTO Manager VALUES ( " + to_string(getId()) + ", " + std::to_string(getManagementExperience()) + " , ' " + getProjectTitle() + " ') ;";
+			//std::cout << query << "\n";
+			int rc = Database::getInstance().executeQuery(query.c_str());
+			if (rc == 0) {
+				std::cout << "Manager inserted successfully\n\n";
+				waitMenu();
+				return true;
+			}
+			else if (rc == 19) {
+				std::cout << "Entered Manager is already exist\n\n";
+				waitMenu();
+				return false;
+			}
 		}
-		else if (rc == 19) {
-			std::cout << "Entered Manager is already exist\n\n";
-			waitMenu();
+		else {
 			return false;
 		}
+
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
@@ -129,18 +137,16 @@ bool Manager::updateManager() {
 		system("cls");
 		std::string query1 = "update Employee set ";
 		std::string query2 = "update Manager set ";
-		std::cout << "Enter the Mid to update Manager\n";
-		std::string tmp1;
-		cin >> tmp1;
+		setId(std::stoi(input("Enter the Mid to update Manager : ")));
 
-		std::string select = "select * from Manager where id = " + tmp1 + " ;";
+		std::string select = "select * from Manager where id = " + std::to_string(getId()) + " ;";
 		Database::getInstance().selectQuery(select.c_str());
 		if (Database::row == 0) {
 			std::cout << "Entered Manager is not in database\n\n";
 			std::cout << "Press 0 to continue\n";
 			int i;
 			std::cin >> i;
-			updateManager();
+			return false;
 		}
 		else {
 			std::map<std::string, std::string> mp1;
@@ -266,8 +272,8 @@ bool Manager::updateManager() {
 					query2 += ",";
 			}
 
-			query1 += " where Eid = " + tmp1 + " ;";
-			query2 += " where id = " + tmp1 + " ;";
+			query1 += " where Eid = " + std::to_string(getId()) + " ;";
+			query2 += " where id = " + std::to_string(getId()) + " ;";
 			//std::cout << query1 << "\n"; 
 			//std::cout << query2 << "\n"; 
 			//std::cin >> query1;

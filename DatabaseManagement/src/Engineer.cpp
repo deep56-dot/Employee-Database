@@ -80,7 +80,9 @@ bool Engineer::viewEngineer() {
 		if (i != 4 && i != 6) {
 			int rc = Database::getInstance().selectQuery(query1.c_str());
 		}
-
+		if (Database::row == 0) {
+			return false;
+		}
 		waitMenu();
 		return true;
 	}
@@ -99,22 +101,27 @@ bool Engineer::insertEngineer() {
 		if (std::cin >> i;  i == 0) {
 			return true;
 		}
-		userInputEngineer();
+		//userInputEngineer();
 
-		insertEmployee();
-		std::string query = "";
-		query += "INSERT INTO Engineer VALUES ( " + to_string(getId()) + ", ' " + programming_language + " ' , ' " + specialization + " ') ;";
-		int rc = Database::getInstance().executeQuery(query.c_str());
-		if (rc == 0) {
-			std::cout << "Engineer Inserted successfully\n\n";
-			waitMenu();
-			return true;
+		if (auto ch = insertEmployee(); ch) {
+			std::string query = "";
+			query += "INSERT INTO Engineer VALUES ( " + to_string(getId()) + ", ' " + programming_language + " ' , ' " + specialization + " ') ;";
+			int rc = Database::getInstance().executeQuery(query.c_str());
+			if (rc == 0) {
+				std::cout << "Engineer Inserted successfully\n\n";
+				waitMenu();
+				return true;
+			}
+			else if (rc == 19) {
+				std::cout << "Entered Enginner is already exist\n\n";
+				waitMenu();
+				return false;
+			}
 		}
-		else if (rc == 19) {
-			std::cout << "Entered Enginner is already exist\n\n";
-			waitMenu();
+		else {
 			return false;
 		}
+
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
@@ -129,18 +136,16 @@ bool Engineer::updateEngineer() {
 
 		std::string query1 = "update Employee set ";
 		std::string query2 = "update Engineer set ";
-		std::cout << "Enter the Eid to update Engineer : ";
-		std::string tmp1;
-		std::cin >> tmp1;
+		setId(std::stoi(input("Enter the Eid to update Engineer : ")));
 
-		std::string select = "select * from Engineer where id = " + tmp1 + " ;";
+		std::string select = "select * from Engineer where id = " + std::to_string(getId()) + " ;";
 		Database::getInstance().selectQuery(select.c_str());
 		if (Database::row == 0) {
 			std::cout << "Entered Engineer is not in database\n\n";
 			std::cout << "Press 0 to continue\n";
 			int i;
 			std::cin >> i;
-			updateEngineer();
+			return false;
 		}
 		else {
 			std::map<std::string, std::string> mp1;
@@ -171,62 +176,62 @@ bool Engineer::updateEngineer() {
 					return true;
 
 				case 1:
-					setFirstname(input("Enter firstname: ", alphaRegex));
+					//setFirstname(input("Enter firstname: ", alphaRegex));
 					mp1.insert({ "firstname" , getFirstname() });
 					break;
 
 				case 2:
-					setLastname(input("Enter LastName: ", alphaRegex));
+					//setLastname(input("Enter LastName: ", alphaRegex))
 					mp1.insert({ "lastname" ,  getLastname() });
 					break;
 
 				case 3:
-					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
+					//setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
 					mp1.insert({ "dob" , getDob() });
 					break;
 
 				case 4:
-					setMobile(input("Enter Mobile: ", mobileRegex));
+					//setMobile(input("Enter Mobile: ", mobileRegex));
 					mp1.insert({ "mobile" , getMobile() });
 					break;
 
 				case 5:
-					setEmail(input("Enter Email: ", emailRegex));
+					//setEmail(input("Enter Email: ", emailRegex));
 					mp1.insert({ "email" , getEmail() });
 					break;
 
 				case 6:
-					setAddress();
+					//setAddress();
 					mp1.insert({ "address" , getAddress() });
 					break;
 
 				case 7:
-					value = input("Enter Gender (Male/Female/Other: )", genderRegex);
+					//value = input("Enter Gender (Male/Female/Other: )", genderRegex);
 					mp1.insert({ "gender" , value });
 					break;
 
 				case 8:
-					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					//setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
 					mp1.insert({ "doj" , getDoj() });
 					break;
 				case 9:
-					setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
+					//setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
 					mp1.insert({ "manager_id" , std::to_string(getManagerId()) });
 					break;
 
 				case 10:
-					setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+					//setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
 					mp1.insert({ "department_id" , std::to_string(getDepartmentId()) });
 					break;
 
 				case 11:
-					setProgramming_language(input("Enter Programming Language: "));
+					//setProgramming_language(input("Enter Programming Language: "));
 					mp2.erase("programming_language");
 					mp2.insert({ "programming_language" , value });
 					break;
 
 				case 12:
-					setSpecialization();
+					//setSpecialization();
 					mp2.erase("specialization");
 					mp2.insert({ "specialization" , getSpecialization() });
 					break;
@@ -259,8 +264,8 @@ bool Engineer::updateEngineer() {
 					query2 += ",";
 			}
 
-			query1 += " where Eid = " + tmp1 + " ;";
-			query2 += " where id = " + tmp1 + " ;";
+			query1 += " where Eid = " + std::to_string(getId()) + " ;";
+			query2 += " where id = " + std::to_string(getId()) + " ;";
 			//std::cout << query1 << "\n";
 			// 
 			//std::cout << query2 << "\n";

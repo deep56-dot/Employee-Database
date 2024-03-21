@@ -65,6 +65,9 @@ bool Employee::viewEmployee() {
 			}
 			break;
 		}
+		if (Database::row == 0) {
+			return false;
+		}
 		return true;
 	}
 	catch (std::exception& e) {
@@ -92,14 +95,14 @@ bool Employee::insertEmployee() {
 		}
 		query += "' , '" + doj + "', " + std::to_string(manager_id) + ", " + std::to_string(department_id) + "); ";
 
-		s.insertSalary(getId());
 		int rc = Database::getInstance().executeQuery(query.c_str());
 		if (rc == 0) {
-			std::cout << "Employee inserted successfully";
+			std::cout << "Employee inserted successfully\n";
+			s.insertSalary(getId());
 			return true;
 		}
 		else if (rc == 19) {
-			std::cout << "Entered manager or department is not available in particular table\n\n";
+			std::cout << "Entered manager or department is not available in particular table Or entered employee is already exist \n\n";
 			waitMenu();
 			return false;
 		}
@@ -115,18 +118,16 @@ bool Employee::insertEmployee() {
 bool Employee::updateEmployee() {
 	try {
 		std::string query = "update Employee set ";
-		std::cout << "Enter the Eid to update Employee\n";
-		std::string tmp;
-		std::cin >> tmp;
+		setId(std::stoi(input("Enter the Eid to update Employee : ")));
 
-		std::string select = "select * from Employee where id = " + tmp + " ;";
+		std::string select = "select * from Employee where Eid = " + std::to_string(getId()) + " ;";
 		Database::getInstance().selectQuery(select.c_str());
 		if (Database::row == 0) {
-			std::cout << "Entered Department is not in database\n\n";
+			std::cout << "Entered Employee is not in database\n\n";
 			std::cout << "Press 0 to continue\n";
 			int i;
 			std::cin >> i;
-			updateEmployee();
+			return false;
 		}
 		else {
 			std::map<std::string, std::string> mp;
@@ -153,52 +154,53 @@ bool Employee::updateEmployee() {
 					return true;
 
 				case 1:
-					setFirstname(input("Enter firstname: ", alphaRegex));
+					//setFirstname(input("Enter firstname: ", alphaRegex));
 					mp.insert({ "firstname" , firstname });
 					break;
 
 				case 2:
-					setLastname(input("Enter LastName: ", alphaRegex));
+					//setLastname(input("Enter LastName: " , alphaRegex));
 					mp.insert({ "lastname" ,  lastname });
 					break;
 
 				case 3:
-					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
+					//setDob(input("Enter DOB (dd-mm-yyyy): " , dateRegex));
 					mp.insert({ "dob" , dob });
 					break;
 
 				case 4:
-					setMobile(input("Enter Mobile: ", mobileRegex));
+					//setMobile(input("Enter Mobile: " , mobileRegex));
 					mp.insert({ "mobile" , mobile });
 					break;
 
 				case 5:
-					setEmail(input("Enter Email: ", emailRegex));
+					//setEmail(input("Enter Email: ", emailRegex));
 					mp.insert({ "email" , email });
 					break;
 
 				case 6:
-					setAddress();
+					//setAddress();
 					mp.insert({ "address" , address });
 					break;
 
 				case 7:
-					value = input("Enter Gender (Male/Female/Other: )", genderRegex);
-					mp.insert({ "gender" , value });
+					/*value = input("Enter Gender (Male/Female/Other: )", genderRegex);
+					mp.insert({ "gender" , value });*/
+					mp.insert({ "gender" , "Male" });
 					break;
 
 				case 8:
-					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					//setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
 					mp.insert({ "doj" , doj });
 					break;
 
 				case 9:
-					setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
+					//setManagerId(stoi(input("Enter Manager Id: ", idRegex))); 
 					mp.insert({ "manager_id" , std::to_string(manager_id) });
 					break;
 
 				case 10:
-					setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+					//setDepartmentId(stoi(input("Enter Department Id: ", idRegex))); 
 					mp.insert({ "department_id" , std::to_string(department_id) });
 					break;
 
@@ -222,11 +224,19 @@ bool Employee::updateEmployee() {
 				if (it != itr)
 					query += ",";
 			}
-			query += "where Eid = " + tmp + " ;";
+			query += "where Eid = " + std::to_string(getId()) + " ;";
 			//std::cout << query << "\n";
-
 			int rc = Database::getInstance().executeQuery(query.c_str());
-			return true;
+			if (rc == 0) {
+				std::cout << "Employee updated successfully\n\n";
+				waitMenu();
+				return true;
+			}
+			else if (rc == 19) {
+				std::cout << "You can not assign value beacuse entered manager or department is not in particular table\n\n";
+				waitMenu();
+				return false;
+			}
 		}
 	}
 	catch (std::exception& e) {
@@ -258,16 +268,13 @@ bool Employee::deleteEmployee() {
 				return true;
 
 			case 1:
-				std::cout << "Enter Eid: ";
-				std::cin >> tmp;
-				query1 += "Eid = " + tmp + ";";
+				//setId(std::stoi(input("Enter Eid: ")));  
+				query1 += "Eid = " + std::to_string(getId()) + ";";
 				break;
 
 			case 2:
-				std::cout << "Enter email: ";
-				std::cin >> tmp;
-				query1 += "email = '" + tmp + "';";
-
+				//setEmail(input("Enter email: "));  
+				query1 += "email = '" + getEmail() + "';";
 				break;
 
 			default:

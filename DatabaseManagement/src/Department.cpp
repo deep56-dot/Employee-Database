@@ -66,7 +66,9 @@ bool Department::viewDepartment() {
 		if (i != 4) {
 			int rc = Database::getInstance().selectQuery(query.c_str());
 		}
-
+		if (Database::row == 0) {
+			return false;
+		}
 		waitMenu();
 		return true;
 	}
@@ -116,18 +118,16 @@ bool Department::updateDepartment() {
 	try {
 		system("cls");
 		std::string query = "update Department set ";
-		std::cout << "Enter the id to update Department\n";
-		std::string tmp;
-		std::cin >> tmp;
+		setId(std::stoi(input("Enter the Did to update Department : ")));
 
-		std::string select = "select * from Department where id = " + tmp + " ;";
+		std::string select = "select * from Department where id = " + std::to_string(getId()) + " ;";
 		Database::getInstance().selectQuery(select.c_str());
 		if (Database::row == 0) {
 			std::cout << "Entered Department is not in database\n\n";
 			std::cout << "Press 0 to continue\n";
 			int i;
 			std::cin >> i;
-			updateDepartment();
+			return false;
 		}
 		else {
 			std::map<std::string, std::string> mp;
@@ -141,7 +141,6 @@ bool Department::updateDepartment() {
 				std::cout << "2. manager id\n";
 				std::cout << "3. description\n";
 				std::cout << "4. toUpdateDatabase\n\n";
-				std::string value;
 				i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-4]" }));
 				switch (i) {
 				case 0:
@@ -185,7 +184,7 @@ bool Department::updateDepartment() {
 				if (it != itr)
 					query += ",";
 			}
-			query += "where id = " + tmp + " ;";
+			query += "where id = " + std::to_string(getId()) + " ;";
 			//std::cout << query << "\n";
 
 			int rc = Database::getInstance().executeQuery(query.c_str());
@@ -228,16 +227,14 @@ bool Department::deleteDepartment() {
 				return true;
 
 			case 1:
-				std::cout << "Enter Did: ";
-				std::cin >> tmp;
-				query += "id = " + tmp + ";";
+				setId(std::stoi(input("Enter Did: ")));
+				query += "id = " + std::to_string(getId()) + ";";
 				//std::cout << query;  
 
 				break;
 			case 2:
-				std::cout << "Enter Dname: ";
-				std::cin >> tmp;
-				query += "Dname = '" + tmp + "';";
+				setName();
+				query += "Dname = '" + getName() + "';";
 				//std::cout << query;
 				break;
 			default:
