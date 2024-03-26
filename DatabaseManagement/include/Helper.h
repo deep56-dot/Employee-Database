@@ -25,7 +25,7 @@ inline std::string input(const std::string prompt, const std::regex& r = rg) {
 }
 
 inline  std::string fun() {
-	return "darshan";
+	return "Deep";
 }
 
 inline void waitMenu() {

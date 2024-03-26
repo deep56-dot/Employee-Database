@@ -5,12 +5,14 @@
 #include "../Helper.h"
 #include "../Regex.h"
 #include "../DBmanage.h"
+#include "../LOG/log.h"
+#include "../LOG/logger.h"
 
 class Salary {
 public:
 
     Salary() = default;
-    Salary(int id,  double amount, double base_salary, double bonus)
+    Salary(int id, double amount, double base_salary, double bonus)
         : Sid(id), amount(amount), base_salary(base_salary), bonus(bonus) {}
 
     int getId() const { return Sid; }
@@ -18,6 +20,7 @@ public:
     double getBaseSalary() const { return base_salary; }
     double getBonus() const { return bonus; }
 
+    void setId(int id) { Sid = id; }
     void setAmount(double figure) {
         amount = figure;
     }
@@ -27,14 +30,14 @@ public:
     bool viewSalary();
     void userInputSalary();
     bool insertSalary(int id) const;
-    double increment(double, std::string);
+    double increment(double, int);
     bool deleteSalary();
     bool updateSalary();
     void action() noexcept;
 
 private:
 
-    int Sid;
+    int Sid{};
     double amount{};
     double base_salary{};
     double bonus{};

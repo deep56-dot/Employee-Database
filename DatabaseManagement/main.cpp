@@ -6,7 +6,7 @@
 void menu();
 
 int main() {
-	Database::getInstance().open("employee.db");
+	Database::getInstance().open("Emp.db");
 	auto ch{ true };
 	while (ch) {
 		system("cls");

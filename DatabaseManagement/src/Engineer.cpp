@@ -101,7 +101,7 @@ bool Engineer::insertEngineer() {
 		if (std::cin >> i;  i == 0) {
 			return true;
 		}
-		//userInputEngineer();
+		userInputEngineer();
 
 		if (auto ch = insertEmployee(); ch) {
 			std::string query = "";
@@ -110,6 +110,7 @@ bool Engineer::insertEngineer() {
 			if (rc == 0) {
 				std::cout << "Engineer Inserted successfully\n\n";
 				waitMenu();
+				logging::Info("Engineer Added for Id: ", std::to_string(getId()));
 				return true;
 			}
 			else if (rc == 19) {
@@ -176,62 +177,62 @@ bool Engineer::updateEngineer() {
 					return true;
 
 				case 1:
-					//setFirstname(input("Enter firstname: ", alphaRegex));
+					setFirstname(input("Enter firstname: ", alphaRegex));
 					mp1.insert({ "firstname" , getFirstname() });
 					break;
 
 				case 2:
-					//setLastname(input("Enter LastName: ", alphaRegex))
+					setLastname(input("Enter LastName: ", alphaRegex));
 					mp1.insert({ "lastname" ,  getLastname() });
 					break;
 
 				case 3:
-					//setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
+					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
 					mp1.insert({ "dob" , getDob() });
 					break;
 
 				case 4:
-					//setMobile(input("Enter Mobile: ", mobileRegex));
+					setMobile(input("Enter Mobile: ", mobileRegex));
 					mp1.insert({ "mobile" , getMobile() });
 					break;
 
 				case 5:
-					//setEmail(input("Enter Email: ", emailRegex));
+					;setEmail(input("Enter Email: ", emailRegex));
 					mp1.insert({ "email" , getEmail() });
 					break;
 
 				case 6:
-					//setAddress();
+					;setAddress();
 					mp1.insert({ "address" , getAddress() });
 					break;
 
 				case 7:
-					//value = input("Enter Gender (Male/Female/Other: )", genderRegex);
+					;value = input("Enter Gender (Male/Female/Other: )", genderRegex);
 					mp1.insert({ "gender" , value });
 					break;
 
 				case 8:
-					//setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					;setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
 					mp1.insert({ "doj" , getDoj() });
 					break;
 				case 9:
-					//setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
+					;setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
 					mp1.insert({ "manager_id" , std::to_string(getManagerId()) });
 					break;
 
 				case 10:
-					//setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+					;setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
 					mp1.insert({ "department_id" , std::to_string(getDepartmentId()) });
 					break;
 
 				case 11:
-					//setProgramming_language(input("Enter Programming Language: "));
+					;setProgramming_language(input("Enter Programming Language: "));
 					mp2.erase("programming_language");
 					mp2.insert({ "programming_language" , value });
 					break;
 
 				case 12:
-					//setSpecialization();
+					;setSpecialization();
 					mp2.erase("specialization");
 					mp2.insert({ "specialization" , getSpecialization() });
 					break;
@@ -284,6 +285,7 @@ bool Engineer::updateEngineer() {
 			if (rc == 0) {
 				std::cout << "Engineer updated successfully\n\n";
 				waitMenu();
+				logging::Info("Engineer updated for Id: ", std::to_string(getId()));
 				return true;
 			}
 			else if (rc == 19) {

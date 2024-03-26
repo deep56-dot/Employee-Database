@@ -111,6 +111,8 @@ bool Manager::insertManager() {
 			if (rc == 0) {
 				std::cout << "Manager inserted successfully\n\n";
 				waitMenu();
+				logging::Info("Manager Added for Id: ", std::to_string(getId()));
+
 				return true;
 			}
 			else if (rc == 19) {
@@ -182,32 +184,32 @@ bool Manager::updateManager() {
 					break;
 
 				case 2:
-					setLastname(input("Enter LastName: ", alphaRegex));
+					setLastname(input("Enter LastName: ", alphaRegex)); 
 					mp1.insert({ "lastname" ,  getLastname() });
 					break;
 
 				case 3:
-					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
+					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex)); 
 					mp1.insert({ "dob" , getDob() });
 					break;
 
 				case 4:
-					setMobile(input("Enter Mobile: ", mobileRegex));
+					setMobile(input("Enter Mobile: ", mobileRegex)); 
 					mp1.insert({ "mobile" , getMobile() });
 					break;
 
 				case 5:
-					setEmail(input("Enter Email: ", emailRegex));
+					setEmail(input("Enter Email: ", emailRegex)); 
 					mp1.insert({ "email" , getEmail() });
 					break;
 
 				case 6:
-					setAddress();
+					setAddress(); 
 					mp1.insert({ "address" , getAddress() });
 					break;
 
 				case 7:
-					value = input("Enter Gender (Male/Female/Other: )", genderRegex);
+					value = input("Enter Gender (Male/Female/Other: )", genderRegex); 
 					mp1.insert({ "gender" , value });
 					break;
 
@@ -233,7 +235,7 @@ bool Manager::updateManager() {
 					break;
 
 				case 12:
-					setManagementExperience(std::stoi(input("Enter Management experience: ")));
+					setManagementExperience(std::stoi(input("Enter Management experience: "))); 
 					mp2.erase("management_experience");
 					mp2.insert({ "management_experience" , std::to_string(getManagementExperience()) });
 					break;
@@ -292,6 +294,7 @@ bool Manager::updateManager() {
 			if (rc == 0) {
 				std::cout << "Manager updated successfully\n\n";
 				waitMenu();
+				logging::Info("Manager updated for Id: ", std::to_string(getId()));
 				return true;
 			}
 			else if (rc == 19) {

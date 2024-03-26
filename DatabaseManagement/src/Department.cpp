@@ -95,13 +95,14 @@ bool Department::insertDepartment() {
 		//std::cout << query;   
 		int rc = Database::getInstance().executeQuery(query.c_str());
 		if (rc == 19) {
-			std::cout << "Entered manager is not available in partivular table \n\n";
+			std::cout << "Entered manager is not available in particular table OR Entered department ID is already exist in table  \n\n";
 			waitMenu();
 			return false;
 		}
 		else if (rc == 0) {
 			std::cout << "Department added successfully \n\n";
 			waitMenu();
+			logging::Info("Department added for Id: ", std::to_string(getId()));
 			return true;
 		}
 		//std::cin >> query;     
@@ -118,7 +119,7 @@ bool Department::updateDepartment() {
 	try {
 		system("cls");
 		std::string query = "update Department set ";
-		setId(std::stoi(input("Enter the Did to update Department : ")));
+		//setId(std::stoi(input("Enter the Did to update Department : "))); 
 
 		std::string select = "select * from Department where id = " + std::to_string(getId()) + " ;";
 		Database::getInstance().selectQuery(select.c_str());
@@ -197,6 +198,7 @@ bool Department::updateDepartment() {
 			else if (rc == 0) {
 				std::cout << "Department Updated successfully \n\n";
 				waitMenu();
+				logging::Info("Department Updated with Id: ", std::to_string(getId()));
 				return true;
 			}
 		}
@@ -251,14 +253,16 @@ bool Department::deleteDepartment() {
 			int change = sqlite3_changes(Database::getInstance().db);
 			if (change == 0) {
 				std::cout << "Selected Department is not in database\n";
+				waitMenu();
 				return false;
 			}
 			else {
 
 				std::cout << "Department Deleted successfully \n\n";
+				waitMenu();
+				logging::Info("Department Deleted with Id: ", std::to_string(getId()));
 				return true;
 			}
-			waitMenu();
 		}
 		else if (rc == 19) {
 			std::cout << "You can not Delete this department because there is employee which are working in this department  \n\n";

@@ -7,6 +7,8 @@
 #include <string>
 #include "../include/Helper.h"
 #include "../sqlite/sqlite3.h"
+#include "LOG/log.h"
+#include "LOG/logger.h"
 
 class Database {
 	char* errorMsg = 0;

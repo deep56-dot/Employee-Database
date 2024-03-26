@@ -98,6 +98,7 @@ bool Employee::insertEmployee() {
 		int rc = Database::getInstance().executeQuery(query.c_str());
 		if (rc == 0) {
 			std::cout << "Employee inserted successfully\n";
+			logging::Info("Employee added for Id: ", std::to_string(getId()));
 			s.insertSalary(getId());
 			return true;
 		}
@@ -230,6 +231,7 @@ bool Employee::updateEmployee() {
 			if (rc == 0) {
 				std::cout << "Employee updated successfully\n\n";
 				waitMenu();
+				logging::Info("Employee updated for Id: ", std::to_string(getId()));
 				return true;
 			}
 			else if (rc == 19) {
@@ -268,12 +270,12 @@ bool Employee::deleteEmployee() {
 				return true;
 
 			case 1:
-				//setId(std::stoi(input("Enter Eid: ")));  
+				setId(std::stoi(input("Enter Eid: ")));  
 				query1 += "Eid = " + std::to_string(getId()) + ";";
 				break;
 
 			case 2:
-				//setEmail(input("Enter email: "));  
+				setEmail(input("Enter email: "));  
 				query1 += "email = '" + getEmail() + "';";
 				break;
 
@@ -297,6 +299,7 @@ bool Employee::deleteEmployee() {
 			else {
 				std::cout << "Employee Deleted successfully\n\n";
 				waitMenu();
+				logging::Info("Employee deleted for Id: ", std::to_string(getId()));
 				return true;
 			}
 		}

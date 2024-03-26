@@ -162,6 +162,8 @@
   <ItemGroup>
     <ClInclude Include="include\DBmanage.h" />
     <ClInclude Include="include\Helper.h" />
+    <ClInclude Include="include\LOG\log.h" />
+    <ClInclude Include="include\LOG\logger.h" />
     <ClInclude Include="include\Model\Department.h" />
     <ClInclude Include="include\Model\Employee.h" />
     <ClInclude Include="include\Model\Engineer.h" />
