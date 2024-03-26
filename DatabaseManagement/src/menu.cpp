@@ -5,7 +5,7 @@ void action(int j);
 
 void menu() noexcept {
 	auto flag{ true };
-	Salary s;
+	Model::Salary s;
 	while (flag) {
 		system("cls");
 		std::cout << "Select The Table You want to interact \n";

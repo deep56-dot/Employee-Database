@@ -1,12 +1,12 @@
 #include "../include/Model/Manager.h"
 
-void Manager::userInputManager() {
+void Model::Manager::userInputManager() {
 
 	try {
-		std::string msg = " Enter # to leave the field Empty\n";
+		std::string msg = " Enter # to leave the field Empty: \n";
 		system("cls");
 		userInputEmployee();
-		setManagementExperience(std::stoi(input("Enter Management Experience: " + msg)));
+		setManagementExperience(std::stoi(input("Enter Management Experience OR " + msg, digitRegex, true)));
 		setProjectTile();
 	}
 	catch (std::exception& e) {
@@ -15,7 +15,7 @@ void Manager::userInputManager() {
 	}
 }
 
-bool Manager::viewManager() {
+bool Model::Manager::viewManager() {
 
 	try {
 		system("cls");
@@ -57,9 +57,9 @@ bool Manager::viewManager() {
 			case 4:
 				std::cout << "Enter departmaent name: ";
 				cin >> tmp1;
-				join += "SELECT Emp1loyee.* FROM Emp1loyee JOIN Department ON Employee.department_id = Department.id WHERE Dname = '" + tmp1 + "' ;";
+				join += "SELECT e.*, m.* FROM Employee e INNER JOIN Manager m ON e.Eid = m.id INNER JOIN Department dept ON e.department_id = dept.id WHERE dept.Dname = '" + tmp1 + "' ;";
 				//std::cout << join;
-				Database::getInstance().selectQuery(join.c_str());
+				DB::Database::getInstance().selectQuery(join.c_str());
 				break;
 			case 5:
 				std::cout << "Enter Project title: ";
@@ -68,7 +68,7 @@ bool Manager::viewManager() {
 				break;
 			case 6:
 				all += "SELECT * FROM Employee INNER JOIN Manager ON Manager.id = Employee.Eid";
-				Database::getInstance().selectQuery(all.c_str());
+				DB::Database::getInstance().selectQuery(all.c_str());
 				break;
 			default:
 				std::cout << "Enter valid field\n";
@@ -78,9 +78,9 @@ bool Manager::viewManager() {
 			break;
 		}
 		if (i != 4 && i != 6) {
-			int rc = Database::getInstance().selectQuery(query1.c_str());
+			int rc = DB::Database::getInstance().selectQuery(query1.c_str());
 		}
-		if (Database::row == 0) {
+		if (DB::Database::row == 0) {
 			return false;
 		}
 		waitMenu();
@@ -93,7 +93,7 @@ bool Manager::viewManager() {
 	}
 }
 
-bool Manager::insertManager() {
+bool Model::Manager::insertManager() {
 	try {
 		system("cls");
 		std::cout << "If you want to go back press 0 Otherwise press 1\n";
@@ -107,11 +107,11 @@ bool Manager::insertManager() {
 			std::string query = "";
 			query += "INSERT INTO Manager VALUES ( " + to_string(getId()) + ", " + std::to_string(getManagementExperience()) + " , ' " + getProjectTitle() + " ') ;";
 			//std::cout << query << "\n";
-			int rc = Database::getInstance().executeQuery(query.c_str());
+			int rc = DB::Database::getInstance().executeQuery(query.c_str());
 			if (rc == 0) {
 				std::cout << "Manager inserted successfully\n\n";
 				waitMenu();
-				logging::Info("Manager Added for Id: ", std::to_string(getId()));
+				logging::Info("Engineer Added for Id: ", std::to_string(getId()));
 
 				return true;
 			}
@@ -133,17 +133,17 @@ bool Manager::insertManager() {
 	}
 }
 
-bool Manager::updateManager() {
+bool Model::Manager::updateManager() {
 
 	try {
 		system("cls");
 		std::string query1 = "update Employee set ";
 		std::string query2 = "update Manager set ";
-		setId(std::stoi(input("Enter the Mid to update Manager : ")));
+		setId(std::stoi(input("Enter the Mid to update Manager : ", idRegex)));
 
 		std::string select = "select * from Manager where id = " + std::to_string(getId()) + " ;";
-		Database::getInstance().selectQuery(select.c_str());
-		if (Database::row == 0) {
+		DB::Database::getInstance().selectQuery(select.c_str());
+		if (DB::Database::row == 0) {
 			std::cout << "Entered Manager is not in database\n\n";
 			std::cout << "Press 0 to continue\n";
 			int i;
@@ -151,8 +151,8 @@ bool Manager::updateManager() {
 			return false;
 		}
 		else {
-			std::map<std::string, std::string> mp1;
-			std::map<std::string, std::string> mp2;
+			std::unordered_map<std::string, std::string> mp1;
+			std::unordered_map<std::string, std::string> mp2;
 			bool check = true;
 			int i;
 			while (check) {
@@ -184,32 +184,32 @@ bool Manager::updateManager() {
 					break;
 
 				case 2:
-					setLastname(input("Enter LastName: ", alphaRegex)); 
+					setLastname(input("Enter LastName: ", alphaRegex));
 					mp1.insert({ "lastname" ,  getLastname() });
 					break;
 
 				case 3:
-					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex)); 
+					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
 					mp1.insert({ "dob" , getDob() });
 					break;
 
 				case 4:
-					setMobile(input("Enter Mobile: ", mobileRegex)); 
+					setMobile(input("Enter Mobile: ", mobileRegex));
 					mp1.insert({ "mobile" , getMobile() });
 					break;
 
 				case 5:
-					setEmail(input("Enter Email: ", emailRegex)); 
+					setEmail(input("Enter Email: ", emailRegex));
 					mp1.insert({ "email" , getEmail() });
 					break;
 
 				case 6:
-					setAddress(); 
+					setAddress();
 					mp1.insert({ "address" , getAddress() });
 					break;
 
 				case 7:
-					value = input("Enter Gender (Male/Female/Other: )", genderRegex); 
+					value = input("Enter Gender (Male/Female/Other: )", genderRegex);
 					mp1.insert({ "gender" , value });
 					break;
 
@@ -235,7 +235,7 @@ bool Manager::updateManager() {
 					break;
 
 				case 12:
-					setManagementExperience(std::stoi(input("Enter Management experience: "))); 
+					setManagementExperience(std::stoi(input("Enter Management experience: ", digitRegex)));
 					mp2.erase("management_experience");
 					mp2.insert({ "management_experience" , std::to_string(getManagementExperience()) });
 					break;
@@ -251,24 +251,30 @@ bool Manager::updateManager() {
 			if (mp1.size() != 0) itr1--;
 			if (mp2.size() != 0) itr2--;
 			for (auto it = mp1.begin(); it != mp1.end(); ++it) {
-				query1 += it->first + " = ";
-				if (it->first == "manager_id" || it->first == "department_id") {
-					query1 += it->second + " ";
+
+				auto& [field, value] = *it;
+
+				query1 += field + " = ";
+				if (field == "manager_id" || field == "department_id") {
+					query1 += value + " ";
 				}
 				else {
-					query1 += "'" + it->second + "' ";
+					query1 += "'" + value + "' ";
 				}
 				if (it != itr1)
 					query1 += ",";
 			}
 
 			for (auto it = mp2.begin(); it != mp2.end(); ++it) {
-				query2 += it->first + " = ";
-				if (it->first == "management_experience") {
-					query2 += it->second + " ";
+
+				auto& [field, value] = *it;
+
+				query2 += field + " = ";
+				if (field == "management_experience") {
+					query2 += value + " ";
 				}
 				else {
-					query2 += "'" + it->second + "' ";
+					query2 += "'" + value + "' ";
 				}
 				if (it != itr2)
 					query2 += ",";
@@ -283,12 +289,12 @@ bool Manager::updateManager() {
 			int rc{};
 			if (mp1.size() != 0) {
 
-				rc = Database::getInstance().executeQuery(query1.c_str());
+				rc = DB::Database::getInstance().executeQuery(query1.c_str());
 			}
 
 			if (mp2.size() != 0) {
 
-				rc = Database::getInstance().executeQuery(query2.c_str());
+				rc = DB::Database::getInstance().executeQuery(query2.c_str());
 			}
 
 			if (rc == 0) {
@@ -311,7 +317,7 @@ bool Manager::updateManager() {
 	}
 }
 
-bool Manager::deleteManager() {
+bool Model::Manager::deleteManager() {
 
 	try {
 		system("cls");
@@ -324,7 +330,7 @@ bool Manager::deleteManager() {
 	}
 }
 
-void Manager::action() noexcept {
+void Model::Manager::action() noexcept {
 	/*auto check{ true };
 	while (check) {
 		system("cls");

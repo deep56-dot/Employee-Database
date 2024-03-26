@@ -28,7 +28,7 @@ namespace logging {
         template<typename... T>
         void log(Level l, T... arg);
 
-        std::string cacheTime() {
+        inline static std::string cacheTime() {
             auto now = std::chrono::system_clock::now();
             std::time_t time = std::chrono::system_clock::to_time_t(now); // to_time_t is a method for converting chrono::time in to time_t(ctime)
 

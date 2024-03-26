@@ -5,64 +5,68 @@
 #include <iostream>
 #include <string>
 #include <string_view>
-#include <map>
+#include <unordered_map>
 #include "../DBmanage.h"
 #include "../Helper.h"
 #include"../Regex.h"
 #include "../LOG/log.h"
 #include "../LOG/logger.h"
 
-class Department {
-public:
-    Department() = default;
-    Department(int id, const std::string name, int manager_id, const std::string description)
-        : Did(id), Dname(name), manager_id(manager_id), description(description) {}
 
-    int getId() const { return Did; }
-    std::string getName() const { return Dname; }
-    int getManagerId() const { return manager_id; }
-    std::string getDescription() const { return description; }
+namespace Model {
+    class Department {
+    public:
+        Department() = default;
+        Department(int id, const std::string_view& name, int manager_id, const std::string_view& description)
+            : Did(id), Dname(name), manager_id(manager_id), description(description) {}
 
-    void setId(const int& id1) {
-        Did = id1;
-    }
+        int getId() const { return Did; }
+        std::string getName() const { return Dname; }
+        int getManagerId() const { return manager_id; }
+        std::string getDescription() const { return description; }
 
-    void setName() {
-        std::string desc;
-        std::string msg = " Enter # to leave the field Empty\n";
-        std::cout << "Enter Department Name: " + msg;
-        std::cin.ignore();
-        std::getline(std::cin, desc);
-        if (desc == "#") desc = "";
-        Dname = desc;
-    }
+        void setId(const int& id1) {
+            Did = id1;
+        }
 
-    void setManagerId(const int& mId) {
-        manager_id = mId;
-    }
+        void setName() {
+            std::string desc;
+            std::string msg = " Enter # to leave the field Empty: \n";
+            std::cout << "Enter Department Name OR " + msg;
+            std::cin.ignore();
+            std::getline(std::cin, desc);
+            if (desc == "#") desc = "";
+            Dname = desc;
+        }
 
-    void setDescription() {
-        std::string desc;
-        std::string msg = " Enter # to leave the field Empty\n";
-        std::cout << "Enter description: " + msg;
-        std::cin.ignore();
-        std::getline(std::cin, desc);
-        if (desc == "#") desc = "";
-        description = desc;
-    }
+        void setManagerId(const int& mId) {
+            manager_id = mId;
+        }
 
-    bool viewDepartment();
-    bool insertDepartment();
-    bool deleteDepartment();
-    bool updateDepartment();
-    void userInput();
-    void action() noexcept;
+        void setDescription() {
+            std::string desc;
+            std::string msg = " Enter # to leave the field Empty: \n";
+            std::cout << "Enter description OR " + msg;
+            std::cin.ignore();
+            std::getline(std::cin, desc);
+            if (desc == "#") desc = "";
+            description = desc;
+        }
 
-private:
+        bool viewDepartment();
+        bool insertDepartment();
+        bool deleteDepartment();
+        bool updateDepartment();
+        void userInput();
+        void action() noexcept;
 
-    int Did{};
-    std::string Dname{};
-    int manager_id{};
-    std::string description{};
-};
+    private:
+
+        int Did{};
+        std::string Dname{};
+        int manager_id{};
+        std::string description{};
+    };
+}
+
 #endif

@@ -17,9 +17,9 @@ void action(int j) noexcept {
 
 		int i;
 		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[1-5]" }));
-		Engineer e;
-		Manager m;
-		Department d;
+		Model::Engineer e;
+		Model::Manager m;
+		Model::Department d;
 		switch (j) {
 		case 1:
 			switch (i) {

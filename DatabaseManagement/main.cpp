@@ -6,7 +6,7 @@
 void menu();
 
 int main() {
-	Database::getInstance().open("Emp.db");
+	DB::Database::getInstance().open("Emp.db");
 	auto ch{ true };
 	while (ch) {
 		system("cls");
@@ -16,21 +16,22 @@ int main() {
 		std::cout << "2. Show Tables\n";
 		std::cout << "3. Delete Tables\n";
 		std::cout << "4. Access Table\n";
-		std::cout << "5. Exit\n\n";
+		std::cout << "5. Backup Table\n";
+		std::cout << "6. Exit\n\n";
 
 		int i;
-		i = std::stoi(input("Enter Choice: ", std::regex{ "[1-5]" }));
+		i = std::stoi(input("Enter Choice: ", std::regex{ "[1-6]" }));
 		switch (i) {
 		case 1:
-			Database::getInstance().createTableQuery();
+			DB::Database::getInstance().createTableQuery();
 			break;
 
 		case 2:
-			Database::getInstance().showTables();
+			DB::Database::getInstance().showTables();
 			break;
 
 		case 3:
-			Database::getInstance().deleteTableQuery();
+			DB::Database::getInstance().deleteTableQuery();
 			break;
 
 		case 4:
@@ -38,6 +39,10 @@ int main() {
 			break;
 
 		case 5:
+			DB::Database::getInstance().writeCSV();
+			break;
+
+		case 6:
 			ch = false;
 			break;
 

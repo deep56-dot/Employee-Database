@@ -8,39 +8,45 @@
 #include "../LOG/log.h"
 #include "../LOG/logger.h"
 
-class Salary {
-public:
+using namespace utility;
 
-    Salary() = default;
-    Salary(int id, double amount, double base_salary, double bonus)
-        : Sid(id), amount(amount), base_salary(base_salary), bonus(bonus) {}
+namespace Model {
+    class Salary {
+    public:
 
-    int getId() const { return Sid; }
-    double getAmount() const { return amount; }
-    double getBaseSalary() const { return base_salary; }
-    double getBonus() const { return bonus; }
+        Salary() = default;
+        Salary(int id, double amount, double base_salary, double bonus)
+            : Sid(id), amount(amount), base_salary(base_salary), bonus(bonus) {}
 
-    void setId(int id) { Sid = id; }
-    void setAmount(double figure) {
-        amount = figure;
-    }
-    void setBaseSalary(const double& bSalary) { base_salary = bSalary; }
-    void setBonus(const double& figure) { bonus = figure; }
+        int getId() const { return Sid; }
+        double getAmount() const { return amount; }
+        double getBaseSalary() const { return base_salary; }
+        double getBonus() const { return bonus; }
 
-    bool viewSalary();
-    void userInputSalary();
-    bool insertSalary(int id) const;
-    double increment(double, int);
-    bool deleteSalary();
-    bool updateSalary();
-    void action() noexcept;
+        void setId(int id) { Sid = id; }
+        void setAmount(double figure) {
+            amount = figure;
+        }
+        void setBaseSalary(const double& bSalary) { base_salary = bSalary; }
+        void setBonus(const double& figure) { bonus = figure; }
 
-private:
+        bool viewSalary();
+        void userInputSalary();
+        bool insertSalary(int id) const;
+        double increment(double, int);
+        bool deleteSalary();
+        bool updateSalary();
+        void action() noexcept;
 
-    int Sid{};
-    double amount{};
-    double base_salary{};
-    double bonus{};
-};
+    private:
+
+        int Sid{};
+        double amount{};
+        double base_salary{};
+        double bonus{};
+    };
+}
+
+
 
 #endif

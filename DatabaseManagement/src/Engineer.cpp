@@ -1,11 +1,11 @@
 #include "../include/Model/Engineer.h"
 
-void Engineer::userInputEngineer() {
+void Model::Engineer::userInputEngineer() {
 	try {
-		std::string msg = " Enter # to leave the field Empty\n";
+		std::string msg = " Enter # to leave the field Empty: \n";
 		system("cls");
 		userInputEmployee();
-		setProgramming_language(input("Enter Programming Language: " + msg));
+		setProgramming_language(input("Enter Programming Language  OR " + msg, allRegex));
 		setSpecialization();
 	}
 	catch (std::exception& e) {
@@ -14,7 +14,7 @@ void Engineer::userInputEngineer() {
 	}
 }
 
-bool Engineer::viewEngineer() {
+bool Model::Engineer::viewEngineer() {
 	try {
 		system("cls");
 		std::string query1 = "SELECT * FROM Employee INNER JOIN Engineer ON Engineer.id = Employee.Eid and ";
@@ -56,9 +56,9 @@ bool Engineer::viewEngineer() {
 			case 4:
 				std::cout << "Enter departmaent name: ";
 				std::cin >> tmp1;
-				join += "SELECT Employee.* FROM Emp1loyee JOIN Department ON Employee.department_id = Department.id WHERE Dname = '" + tmp1 + "' ;";
+				join += "SELECT e.*, eng.* FROM Employee e INNER JOIN Engineer eng ON e.Eid = eng.id INNER JOIN Department dept ON e.department_id = dept.id WHERE dept.Dname = '" + tmp1 + "' ;";
 				//std::cout << join;
-				Database::getInstance().selectQuery(join.c_str());
+				DB::Database::getInstance().selectQuery(join.c_str());
 				break;
 			case 5:
 				std::cout << "Enter Manager Id: ";
@@ -67,7 +67,7 @@ bool Engineer::viewEngineer() {
 				break;
 			case 6:
 				all += "SELECT * FROM Employee INNER JOIN Engineer ON Engineer.id = Employee.Eid";
-				Database::getInstance().selectQuery(all.c_str());
+				DB::Database::getInstance().selectQuery(all.c_str());
 				break;
 			default:
 				std::cout << "Enter valid field\n";
@@ -78,9 +78,9 @@ bool Engineer::viewEngineer() {
 		}
 
 		if (i != 4 && i != 6) {
-			int rc = Database::getInstance().selectQuery(query1.c_str());
+			int rc = DB::Database::getInstance().selectQuery(query1.c_str());
 		}
-		if (Database::row == 0) {
+		if (DB::Database::row == 0) {
 			return false;
 		}
 		waitMenu();
@@ -93,7 +93,7 @@ bool Engineer::viewEngineer() {
 	}
 }
 
-bool Engineer::insertEngineer() {
+bool Model::Engineer::insertEngineer() {
 	try {
 		system("cls");
 		std::cout << "If you want to go back press 0 Otherwise press 1\n";
@@ -106,7 +106,7 @@ bool Engineer::insertEngineer() {
 		if (auto ch = insertEmployee(); ch) {
 			std::string query = "";
 			query += "INSERT INTO Engineer VALUES ( " + to_string(getId()) + ", ' " + programming_language + " ' , ' " + specialization + " ') ;";
-			int rc = Database::getInstance().executeQuery(query.c_str());
+			int rc = DB::Database::getInstance().executeQuery(query.c_str());
 			if (rc == 0) {
 				std::cout << "Engineer Inserted successfully\n\n";
 				waitMenu();
@@ -131,17 +131,17 @@ bool Engineer::insertEngineer() {
 	}
 }
 
-bool Engineer::updateEngineer() {
+bool Model::Engineer::updateEngineer() {
 	try {
 		system("cls");
 
 		std::string query1 = "update Employee set ";
 		std::string query2 = "update Engineer set ";
-		setId(std::stoi(input("Enter the Eid to update Engineer : ")));
+		setId(std::stoi(input("Enter the Eid to update Engineer : ", idRegex)));
 
 		std::string select = "select * from Engineer where id = " + std::to_string(getId()) + " ;";
-		Database::getInstance().selectQuery(select.c_str());
-		if (Database::row == 0) {
+		DB::Database::getInstance().selectQuery(select.c_str());
+		if (DB::Database::row == 0) {
 			std::cout << "Entered Engineer is not in database\n\n";
 			std::cout << "Press 0 to continue\n";
 			int i;
@@ -149,8 +149,8 @@ bool Engineer::updateEngineer() {
 			return false;
 		}
 		else {
-			std::map<std::string, std::string> mp1;
-			std::map<std::string, std::string> mp2;
+			std::unordered_map<std::string, std::string> mp1;
+			std::unordered_map<std::string, std::string> mp2;
 			bool check = true;
 			int i;
 			while (check) {
@@ -197,42 +197,42 @@ bool Engineer::updateEngineer() {
 					break;
 
 				case 5:
-					;setEmail(input("Enter Email: ", emailRegex));
+					setEmail(input("Enter Email: ", emailRegex));
 					mp1.insert({ "email" , getEmail() });
 					break;
 
 				case 6:
-					;setAddress();
+					setAddress();
 					mp1.insert({ "address" , getAddress() });
 					break;
 
 				case 7:
-					;value = input("Enter Gender (Male/Female/Other: )", genderRegex);
+					value = input("Enter Gender (Male/Female/Other: )", genderRegex);
 					mp1.insert({ "gender" , value });
 					break;
 
 				case 8:
-					;setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
 					mp1.insert({ "doj" , getDoj() });
 					break;
 				case 9:
-					;setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
+					setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
 					mp1.insert({ "manager_id" , std::to_string(getManagerId()) });
 					break;
 
 				case 10:
-					;setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+					setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
 					mp1.insert({ "department_id" , std::to_string(getDepartmentId()) });
 					break;
 
 				case 11:
-					;setProgramming_language(input("Enter Programming Language: "));
+					setProgramming_language(input("Enter Programming Language: ", allRegex));
 					mp2.erase("programming_language");
 					mp2.insert({ "programming_language" , value });
 					break;
 
 				case 12:
-					;setSpecialization();
+					setSpecialization();
 					mp2.erase("specialization");
 					mp2.insert({ "specialization" , getSpecialization() });
 					break;
@@ -245,22 +245,30 @@ bool Engineer::updateEngineer() {
 
 			auto itr1 = mp1.end();
 			auto itr2 = mp2.end();
+
 			if (mp1.size() != 0) itr1--;
 			if (mp2.size() != 0) itr2--;
+
 			for (auto it = mp1.begin(); it != mp1.end(); ++it) {
-				query1 += it->first + " = ";
-				if (it->first == "manager_id" || it->first == "department_id") {
-					query1 += it->second + " ";
+
+				auto& [field, value] = *it;
+
+				query1 += field + " = ";
+				if (field == "manager_id" || field == "department_id") {
+					query1 += value + " ";
 				}
 				else {
-					query1 += "'" + it->second + "' ";
+					query1 += "'" + value + "' ";
 				}
 				if (it != itr1)
 					query1 += ",";
 			}
 
 			for (auto it = mp2.begin(); it != mp2.end(); ++it) {
-				query2 += it->first + " = '" + it->second + "' ";
+
+				auto& [field, value] = *it;
+
+				query2 += field + " = '" + value + "' ";
 				if (it != itr2)
 					query2 += ",";
 			}
@@ -268,18 +276,18 @@ bool Engineer::updateEngineer() {
 			query1 += " where Eid = " + std::to_string(getId()) + " ;";
 			query2 += " where id = " + std::to_string(getId()) + " ;";
 			//std::cout << query1 << "\n";
-			// 
+
 			//std::cout << query2 << "\n";
 
 			int rc{};
 			if (mp1.size() != 0) {
 
-				rc = Database::getInstance().executeQuery(query1.c_str());
+				rc = DB::Database::getInstance().executeQuery(query1.c_str());
 			}
 
 			if (mp2.size() != 0) {
 
-				rc = Database::getInstance().executeQuery(query2.c_str());
+				rc = DB::Database::getInstance().executeQuery(query2.c_str());
 			}
 
 			if (rc == 0) {
@@ -302,7 +310,7 @@ bool Engineer::updateEngineer() {
 	}
 }
 
-bool Engineer::deleteEngineer() {
+bool Model::Engineer::deleteEngineer() {
 	try {
 		system("cls");
 		return deleteEmployee();
@@ -314,7 +322,7 @@ bool Engineer::deleteEngineer() {
 	}
 }
 
-void Engineer::action() noexcept {
+void Model::Engineer::action() noexcept {
 
 	/*auto check{ true };
 	while (check) {
