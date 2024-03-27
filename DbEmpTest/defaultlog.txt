@@ -1,0 +1,6 @@
+27-03-2024 17:36:52 [Deep] [Info] Database Open Successfully 
+27-03-2024 17:36:52 [Deep] [Info] Table created successfully 
+27-03-2024 17:36:52 [Deep] [Info] Table created successfully 
+27-03-2024 17:36:52 [Deep] [Info] Table created successfully 
+27-03-2024 17:36:52 [Deep] [Info] Table created successfully 
+27-03-2024 17:36:52 [Deep] [Info] Table created successfully 

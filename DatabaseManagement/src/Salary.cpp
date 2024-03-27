@@ -153,6 +153,7 @@ bool Model::Salary::updateSalary() {
 
 				return true;
 			}
+			return false;
 		}
 	}
 	catch (std::exception& e) {

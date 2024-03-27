@@ -2,7 +2,7 @@
 #include "include/Model/Employee.h"
 #include "include/Model/Salary.h"
 #include "gtest/gtest.h"
-
+using Model::Employee, Model::Salary;
 class EmployeeFixture : public testing::Test {
 protected:
 

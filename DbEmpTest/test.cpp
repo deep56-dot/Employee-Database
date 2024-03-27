@@ -167,7 +167,7 @@ TEST_F(SalaryFixture, DISABLED_UpdateTest) {
 }
 
 int main(int argv, char** argc) {
-	Database::getInstance().open("Emp.db");
+	DB::Database::getInstance().open("Emp.db");
 	testing::InitGoogleTest(&argv, argc);
 	return RUN_ALL_TESTS();
 }

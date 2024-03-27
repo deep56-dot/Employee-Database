@@ -245,6 +245,7 @@ bool Model::Employee::updateEmployee() {
 				waitMenu();
 				return false;
 			}
+			return false;
 		}
 	}
 	catch (std::exception& e) {
@@ -308,14 +309,14 @@ bool Model::Employee::deleteEmployee() {
 				logging::Info("Employee deleted for Id: ", std::to_string(getId()));
 				return true;
 			}
+			return false;
 		}
 		else if (rc == 19) {
 			std::cout << "You can not delete this Employee because this is a manager of other employees \n\n";
 			waitMenu();
 			return false;
 		}
-
-
+		return false;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;

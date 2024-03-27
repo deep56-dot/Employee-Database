@@ -31,6 +31,11 @@ namespace Model {
 		static std::optional<Table> getTable(const std::string& tableName);
 		static std::vector<Model::Table> getAllTables();
 
+		void writeCSV();
+		bool exportToCsv(const std::string_view&, const std::filesystem::path&);
+
+		void action();
+
 	private:
 		std::string name;
 		std::map<std::string, std::string> columnType;

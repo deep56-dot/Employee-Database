@@ -120,6 +120,7 @@ bool Model::Manager::insertManager() {
 				waitMenu();
 				return false;
 			}
+			return false;
 		}
 		else {
 			return false;
@@ -308,6 +309,7 @@ bool Model::Manager::updateManager() {
 				waitMenu();
 				return false;
 			}
+			return false;
 		}
 	}
 	catch (std::exception& e) {

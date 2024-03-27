@@ -2,7 +2,7 @@
 #pragma once
 #include "include/Model/Department.h"
 #include "gtest/gtest.h"
-
+using Model::Department;
 class DepartmentFixture : public testing::Test {
 protected:
 

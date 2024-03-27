@@ -118,6 +118,7 @@ bool Model::Engineer::insertEngineer() {
 				waitMenu();
 				return false;
 			}
+			return false;
 		}
 		else {
 			return false;
@@ -301,6 +302,7 @@ bool Model::Engineer::updateEngineer() {
 				waitMenu();
 				return false;
 			}
+			return false;
 		}
 	}
 	catch (std::exception& e) {

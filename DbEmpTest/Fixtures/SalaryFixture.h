@@ -2,7 +2,7 @@
 #pragma once
 #include "include/Model/Salary.h"
 #include "gtest/gtest.h"
-
+using Model::Salary;
 class SalaryFixture : public testing::Test {
 protected:
 

@@ -2,7 +2,7 @@
 #pragma once
 #include "include/Model/Manager.h"
 #include "gtest/gtest.h"
-
+using Model::Manager, Model::Salary;
 class ManagerFixture : public testing::Test {
 protected:
 	void SetUp() {

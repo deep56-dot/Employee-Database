@@ -27,15 +27,15 @@ namespace logging {
     void Log::log(Log::Level l, T... arg) {
         if (m_LogLevel >= l) {
             std::string tmp = cacheTime();
-            std::cout << cacheTime() << " ";
-            std::cout << "[" << Log::logger << "]" << " ";
+        /*    std::cout << cacheTime() << " ";
+            std::cout << "[" << Log::logger << "]" << " ";*/
             tmp.append(" [");
             tmp.append(std::string(Log::logger));
             tmp.append("] ");
-            std::cout << default_logger()->getlevelwithColor(l) << " ";
+            //std::cout << default_logger()->getlevelwithColor(l) << " ";
             tmp.append((default_logger()->getlevel(l)));
             tmp.append(" ");
-            Log::print(arg...);
+            //Log::print(arg...);
             if (this->fileDump) {
                 this->logBuffer.append(tmp);
                 default_logger()->setupBuffer(arg...);

@@ -3,7 +3,7 @@
 #include "include/Model/Engineer.h"
 #include "include/Model/Salary.h"
 #include "gtest/gtest.h"
-
+using Model::Engineer,Model::Salary;
 class EngineerFixture : public testing::Test {
 protected:
 
