@@ -16,7 +16,6 @@ using namespace utility;
 
 namespace DB {
 	class Database {
-		char* errorMsg = 0;
 
 		Database() = default;
 		~Database() {
@@ -27,6 +26,7 @@ namespace DB {
 		Database& operator=(const Database&) = delete;
 
 	public:
+		char* errorMsg = 0;
 		sqlite3* db{};
 		int rc{ 0 };
 		sqlite3_stmt* stmt{};
@@ -39,9 +39,6 @@ namespace DB {
 			static Database db;
 			return db;
 		}
-		void createTableQuery();
-		void deleteTableQuery();
-		void showTables();
 		void writeCSV();
 		bool exportToCsv(const std::string_view&, const std::filesystem::path&);
 		static int callback(void* data, int args, char** row, char** col);

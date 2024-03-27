@@ -135,123 +135,7 @@ bool DB::Database::open(const char* str) {
 	return true;
 }
 
-void DB::Database::createTableQuery() {
-	system("cls");
-	std::cout << "If you want to go back press 0 Otherwise press 1\n";
-	int i;
-	if (std::cin >> i;  i == 0) {
-		return;
-	}
-	std::string tableName;
-	std::cout << "Enter table name: ";
-	std::cin >> tableName;
-	std::string sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (";
-	std::vector<std::string> columns;
 
-	char choice;
-
-	do {
-		std::string columnName, columnType, constraints;
-		std::cout << "\nEnter column name: ";
-		std::cin >> columnName;
-		std::cout << "Enter column type: ";
-		std::cin >> columnType;
-		std::cout << "Enter column constraints : ";
-		std::cin.ignore();
-		std::getline(std::cin, constraints);
-
-		columns.push_back(columnName + " " + columnType + " " + constraints);
-		std::cout << "Add another column? (y/n): ";
-		std::cin >> choice;
-
-	} while (choice == 'y' || choice == 'Y');
-
-	for (int i = 0; i < columns.size(); ++i) {
-		sql += columns[i];
-		if (i < columns.size() - 1) {
-			sql += ",";
-		}
-	}
-	sql += ");";
-
-	//std::cout << sql;
-	rc = executeQuery(sql.c_str());
-	if (rc == 0) {
-		std::cout << "\nTable created Suceesfully\n\n";
-		waitMenu();
-	}
-	//std::cout << sql << "\n\n";
-
-}
-
-void DB::Database::showTables() {
-
-	std::string showQuery = " SELECT name FROM sqlite_schema ;";
-
-	rc = selectQuery(showQuery.c_str());
-
-	waitMenu();
-}
-
-void DB::Database::deleteTableQuery() {
-	system("cls");
-	int i;
-	std::cout << "Select the operation\n";
-	std::cout << "0. To Go Back \n";
-	std::cout << "1. Drop Table\n";
-	std::cout << "2. Delete Data within table\n\n";
-	i = std::stoi(input("Enter choice:", std::regex{ "[0-2]" }));
-	std::string deleteQuery;
-	std::string tableName;
-
-	switch (i) {
-	case 0:
-		return;
-		break;
-	case 1:
-		std::cout << "\nEnter Table Name to Drop: ";
-		std::cin >> tableName;
-		if (tableName == "Employee" || tableName == "Salary" || tableName == "Engineer" || tableName == "Manager" || tableName == "Department") {
-			std::cout << " \x1b[31mYou can not delete this Table\x1b[0m\n";
-			waitMenu();
-			break;
-		}
-		deleteQuery = "DROP TABLE " + tableName + ";";
-		//std::cout << deleteQuery << "\n\n";
-		rc = executeQuery(deleteQuery.c_str());
-
-		if (rc == 0) {
-			std::cout << "Table Dropped Succesfully ! \n\n";
-			waitMenu();
-		}
-		break;
-
-	case 2:
-
-		std::cout << "\nEnter Table Name to Delete: ";
-		std::cin >> tableName;
-		if (tableName == "Employee" || tableName == "Salary" || tableName == "Engineer" || tableName == "Manager" || tableName == "Department") {
-			std::cout << "\x1b[31mYou can not delete this Table\x1b[0m\n";
-			waitMenu();
-			break;
-		}
-		deleteQuery = "DELETE FROM " + tableName + ";";
-		//std::cout << deleteQuery << "\n\n";
-		rc = executeQuery(deleteQuery.c_str());
-		if (rc == 0) {
-
-			std::cout << "Table Deleted Succesfully ! \n\n";
-			waitMenu();
-		}
-		break;
-
-	default:
-		std::cout << "Wrong Input..!\n\n";
-		break;
-
-	}
-
-}
 
 int DB::Database::executeQuery(const char* sql, float count)
 {
@@ -382,7 +266,7 @@ bool DB::Database::exportToCsv(const std::string_view& tableName, const std::fil
 	}
 	file << ";\n";
 
-	while (rc = sqlite3_step(stmt), rc == 100) {
+	while (rc = sqlite3_step(stmt) == 100) {
 		for (auto i{ 0 }; i < columnsCount; i++) {
 			file << sqlite3_column_text(stmt, i);
 			if (i != columnsCount - 1) {
