@@ -30,27 +30,15 @@ namespace Model {
             Did = id1;
         }
 
-        void setName() {
-            std::string desc;
-            std::string msg = " Enter # to leave the field Empty: \n";
-            std::cout << "Enter Department Name OR " + msg;
-            std::cin.ignore();
-            std::getline(std::cin, desc);
-            if (desc == "#") desc = "";
-            Dname = desc;
+        void setName(const std::string_view& name) {
+            Dname = name;
         }
 
         void setManagerId(const int& mId) {
             manager_id = mId;
         }
 
-        void setDescription() {
-            std::string desc;
-            std::string msg = " Enter # to leave the field Empty: \n";
-            std::cout << "Enter description OR " + msg;
-            std::cin.ignore();
-            std::getline(std::cin, desc);
-            if (desc == "#") desc = "";
+        void setDescription(const std::string_view& desc) {
             description = desc;
         }
 

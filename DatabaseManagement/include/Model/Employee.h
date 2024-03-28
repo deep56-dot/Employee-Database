@@ -50,15 +50,7 @@ namespace Model {
         void setDob(const std::string_view& str) { dob = str; }
         void setMobile(const std::string_view& str) { mobile = str; }
         void setEmail(const std::string_view& str) { email = str; }
-        void setAddress() {
-            std::string add;
-            std::string msg = " Enter # to leave the field Empty: \n";
-            std::cout << "Enter address OR " + msg;
-            std::cin.ignore();
-            std::getline(std::cin, add);
-            if (add == "#") add = "";
-            address = add;
-        }
+        void setAddress(const std::string_view& add) { address = add; }
         void setGender(const Gender& g) { gender = g; }
         void setDoj(const std::string_view& str) { doj = str; }
         void setManagerId(const int& id) { manager_id = id; }

@@ -5,16 +5,18 @@ bool Model::Manager::userInputManager() {
 	try {
 		std::string msg = " Enter # to leave the field Empty: \n";
 		system("cls");
-		if (!userInputEmployee()) {
-			return false;
-		}
-		setManagementExperience(std::stoi(input("Enter Management Experience OR " + msg, digitRegex, true).value()));
-		setProjectTile();
+		if (!userInputEmployee()) return false;
+
+		if (auto tmp = input("Enter Management Experience OR " + msg, digitRegex); tmp.has_value()) setManagementExperience(std::stoi(tmp.value()));
+		else return false;
+
+		if (auto tmp = input("Enter Project Title OR " + msg, allRegex); tmp.has_value()) setProjectTile(tmp.value());
+		else return false;
 		return true;
 	}
 	catch (std::exception& e) {
-		/*std::cout << e.what() << std::endl;
-		waitMenu();*/
+		//std::cout << e.what() << std::endl;
+		//waitMenu();
 		return false;
 	}
 }
@@ -85,7 +87,7 @@ bool Model::Manager::viewManager() {
 			int rc = DB::Database::getInstance().selectQuery(query1.c_str());
 		}
 		if (DB::Database::row == 0) {
-			std::cout << "\x1b[38;5;208mManager Not Available\x1b[0m\n";
+			std::cout << "\x1b[33m Selected Manager is not available!!! \x1b[0m\n";
 			waitMenu();
 			return false;
 		}
@@ -107,8 +109,11 @@ bool Model::Manager::insertManager() {
 		if (i = std::stoi(input("", std::regex{ "^[0-1]$" }).value_or("0"));  i == 0) {
 			return true;
 		}
-		if (!userInputManager()) {
-			std::cout << "\x1b[33mInsertion Failed!!! \x1b[0m\n";
+
+		bool flag = userInputManager();
+
+		if (!flag) {
+			std::cout << "\x1b[33m Insertion Failed!!! \x1b[0m\n";
 			waitMenu();
 			return false;
 		}
@@ -119,14 +124,13 @@ bool Model::Manager::insertManager() {
 			//std::cout << query << "\n";
 			int rc = DB::Database::getInstance().executeQuery(query.c_str());
 			if (rc == 0) {
-				std::cout << "Manager inserted successfully\n\n";
+				std::cout << "\x1b[32mManager inserted successfully\x1b[0m\n\n";
 				waitMenu();
 				logging::Info("Engineer Added for Id: ", std::to_string(getId()));
-
 				return true;
 			}
 			else if (rc == 19) {
-				std::cout << "Entered Manager is already exist\n\n";
+				std::cout << "\x1b[33mEntered Manager is already exist\x1b[0m\n\n";
 				waitMenu();
 				return false;
 			}
@@ -142,6 +146,7 @@ bool Model::Manager::insertManager() {
 		waitMenu();
 		return false;
 	}
+	return false;
 }
 
 bool Model::Manager::updateManager() {
@@ -156,9 +161,7 @@ bool Model::Manager::updateManager() {
 		DB::Database::getInstance().selectQuery(select.c_str());
 		if (DB::Database::row == 0) {
 			std::cout << "Entered Manager is not in database\n\n";
-			std::cout << "Press 0 to continue\n";
-			int i;
-			std::cin >> i;
+			waitMenu();
 			return false;
 		}
 		else {
@@ -190,63 +193,147 @@ bool Model::Manager::updateManager() {
 					return true;
 
 				case 1:
-					setFirstname(input("Enter firstname: ", alphaRegex).value());
+
+					if (auto tmp = input("Enter FirstName: ", alphaRegex); tmp.has_value()) setFirstname(tmp.value());
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("firstname");
 					mp1.insert({ "firstname" , getFirstname() });
 					break;
 
 				case 2:
-					setLastname(input("Enter LastName: ", alphaRegex).value());
+					if (auto tmp = input("Enter LastName: ", alphaRegex); tmp.has_value()) setLastname(tmp.value());
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("lastname");
 					mp1.insert({ "lastname" ,  getLastname() });
 					break;
 
 				case 3:
-					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex).value());
+					if (auto tmp = input("Enter DOB (dd-mm-yyyy): ", dateRegex); tmp.has_value()) setDob(tmp.value());
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("dob");
 					mp1.insert({ "dob" , getDob() });
 					break;
 
 				case 4:
-					setMobile(input("Enter Mobile: ", mobileRegex).value());
+					if (auto tmp = input("Enter Mobile OR: ", mobileRegex); tmp.has_value()) setMobile(tmp.value());
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("mobile");
 					mp1.insert({ "mobile" , getMobile() });
 					break;
 
 				case 5:
-					setEmail(input("Enter Email: ", emailRegex).value());
+					if (auto tmp = input("Enter Email: ", emailRegex); tmp.has_value()) setEmail(tmp.value());
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("email");
 					mp1.insert({ "email" , getEmail() });
 					break;
 
 				case 6:
-					setAddress();
+					if (auto tmp = input("Enter Address: ", allRegex); tmp.has_value()) setAddress(tmp.value());
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("address");
 					mp1.insert({ "address" , getAddress() });
 					break;
 
 				case 7:
-					value = input("Enter Gender (Male/Female/Other: )", genderRegex).value();
-					mp1.insert({ "gender" , value });
+				{
+					auto gender = input("Enter Gender(Male / Female / Other): ", genderRegex);
+					if (gender.has_value()) {
+						if (gender.value() == "Male") {
+							setGender(Gender::Male);
+						}
+						else if (gender.value() == "Female") {
+							setGender(Gender::Female);
+						}
+						else {
+							setGender(Gender::Other);
+						}
+					}
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("gender");
+					mp1.insert({ "gender" , gender.value() });
 					break;
+				}
 
 				case 8:
-					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex).value());
+					if (auto tmp = input("Enter DOJ(dd-mm-yyyy): ", dateRegex); tmp.has_value())  setDoj(tmp.value());
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("doj");
 					mp1.insert({ "doj" , getDoj() });
 					break;
 
 				case 9:
-					setManagerId(stoi(input("Enter Manager Id: ", idRegex).value()));
+					if (auto tmp = input("Enter Manager Id: ", idRegex); tmp.has_value()) setManagerId(stoi(tmp.value()));
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("manager_id");
 					mp1.insert({ "manager_id" , std::to_string(getManagerId()) });
 					break;
 
 				case 10:
-					setDepartmentId(stoi(input("Enter Department Id: ", idRegex).value()));
+					if (auto tmp = input("Enter Department Id: ", idRegex); tmp.has_value()) setDepartmentId(stoi(tmp.value()));
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+					mp1.erase("department_id");
 					mp1.insert({ "department_id" , std::to_string(getDepartmentId()) });
 					break;
 
 				case 11:
-					setProjectTile();
+					if (auto tmp = input("Enter Project Title: ", allRegex); tmp.has_value()) setProjectTile(tmp.value());
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
 					mp2.erase("project_title");
 					mp2.insert({ "project_title" , project_title });
 					break;
 
 				case 12:
-					setManagementExperience(std::stoi(input("Enter Management experience: ", digitRegex).value()));
+					if (auto tmp = input("Enter Management Experience: ", digitRegex); tmp.has_value()) setManagementExperience(std::stoi(tmp.value()));
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
 					mp2.erase("management_experience");
 					mp2.insert({ "management_experience" , std::to_string(getManagementExperience()) });
 					break;
@@ -295,7 +382,6 @@ bool Model::Manager::updateManager() {
 			query2 += " where id = " + std::to_string(getId()) + " ;";
 			//std::cout << query1 << "\n"; 
 			//std::cout << query2 << "\n"; 
-			//std::cin >> query1;
 
 			int rc{};
 			if (mp1.size() != 0) {
@@ -309,25 +395,26 @@ bool Model::Manager::updateManager() {
 			}
 
 			if (rc == 0) {
-				std::cout << "Manager updated successfully\n\n";
+				std::cout << "\x1b[32mManager updated successfully\x1b[0m\n\n";
 				waitMenu();
 				logging::Info("Manager updated for Id: ", std::to_string(getId()));
 				return true;
 			}
 			else if (rc == 19) {
-				std::cout << "You can not update that value Because entered manager or department is not in particular table\n\n";
+				std::cout << "\x1b[33mYou can not update that value Because entered manager or department is not in particular table\x1b[0m\n\n";
 				waitMenu();
 				return false;
 			}
-			return false;
 		}
+		return false;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
-		std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
+		std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}
+	return false;
 }
 
 bool Model::Manager::deleteManager() {

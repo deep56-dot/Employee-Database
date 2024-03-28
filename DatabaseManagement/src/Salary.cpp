@@ -4,14 +4,19 @@ bool Model::Salary::userInputSalary() {
 
 	try {
 		std::string msg = " Enter # to leave the field Empty: \n";
-		setBaseSalary(std::stof(input("Enter Base Salary OR " + msg, salaryRegex, true).value()));
-		setBonus(std::stof(input("Enter Bonus OR ", salaryRegex, true).value()));
+
+		if (auto tmp = input("Enter Base Salary OR " + msg, salaryRegex, true); tmp.has_value()) setBaseSalary(std::stof(tmp.value()));
+		else return false;
+
+		if (auto tmp = input("Enter Bonus OR " + msg, salaryRegex, true); tmp.has_value()) setBonus(std::stof(tmp.value()));
+		else return false;
+
 		setAmount(base_salary + bonus);
 		return true;
 	}
 	catch (std::exception& e) {
-	/*	std::cout << e.what() << std::endl;
-		waitMenu();*/
+		std::cout << e.what() << std::endl;
+		waitMenu();
 		return false;
 	}
 }
@@ -54,7 +59,6 @@ bool Model::Salary::viewSalary() {
 		query += tmp + " ;";
 		DB::Database::getInstance().selectQuery(query.c_str());
 		if (DB::Database::row == 0) {
-			std::cout << "\x1b[38;5;208mSalary Not Available\x1b[0m\n";
 			waitMenu();
 			return false;
 		}
@@ -126,16 +130,31 @@ bool Model::Salary::updateSalary() {
 					return true;
 
 				case 1:
-					setBaseSalary(std::stof(input("Enter Base Salary: ", salaryRegex).value()));
+					if (auto tmp = input("Enter Base Salary: ", salaryRegex, true); tmp.has_value()) setBaseSalary(std::stof(tmp.value()));
+					else {
+						std::cout << "\x1b[33m Updation Fail!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
 					break;
 
 				case 2:
-					setBonus(std::stof(input("Enter Bonus: ", salaryRegex).value()));
+					if (auto tmp = input("Enter Bonus: ", salaryRegex, true); tmp.has_value()) setBonus(std::stof(tmp.value()));
+					else {
+						std::cout << "\x1b[33m Updation Fail!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
 					break;
 
 				case 3:
-					value = input("Enter Percantage by which you want to increase the salary :", salaryRegex).value_or("0");
-					increment(std::stof(value), getId());
+					if (auto tmp = input("Enter Precentage By which you want to : ", salaryRegex, true); tmp.has_value()) increment(std::stof(tmp.value()), getId());
+					else {
+						std::cout << "\x1b[33m Updation Fail!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+
 					break;
 
 				case 4:
@@ -150,7 +169,7 @@ bool Model::Salary::updateSalary() {
 
 			rc = DB::Database::getInstance().executeQuery(query.c_str());
 			if (rc == 0) {
-				std::cout << "Salary updated successfully\n\n";
+				std::cout << "\x1b[32mSalary updated successfully\x1b[0m\n\n";
 				waitMenu();
 				logging::Info("Salary updated for Id: ", std::to_string(getId()));
 
@@ -161,7 +180,7 @@ bool Model::Salary::updateSalary() {
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
-		std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
+		std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}

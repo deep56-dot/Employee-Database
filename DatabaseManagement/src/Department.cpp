@@ -3,15 +3,23 @@
 bool Model::Department::userInputDepartment() {
 	try {
 		system("cls");
-		setId(std::stoi(input("Enter Department ID: ", idRegex).value()));
-		setName();
-		setManagerId(std::stoi(input("Enter Department Manager ID: ", idRegex).value()));
-		setDescription();
+		if (auto temp = input("Enter Department ID: ", idRegex); temp.has_value()) setId(std::stoi(temp.value()));
+		else return false;
+
+		if (auto temp = input("Enter Department Name: ", alphaRegex); temp.has_value()) setName(temp.value());
+		else return false;
+
+		if (auto temp = input("Enter  Manager ID: ", idRegex); temp.has_value()) setManagerId(std::stoi(temp.value()));
+		else return false;
+
+		if (auto temp = input("Enter Department Description: ", allRegex); temp.has_value()) setDescription(temp.value());
+		else return false;
+
 		return true;
 	}
 	catch (std::exception& e) {
-		/*std::cout << e.what() << std::endl;
-		waitMenu();*/
+		std::cout << e.what() << std::endl;
+		waitMenu(); 
 		return false;
 	}
 }
@@ -108,7 +116,7 @@ bool Model::Department::insertDepartment() {
 			return false;
 		}
 		else if (rc == 0) {
-			std::cout << "Department added successfully \n\n";
+			std::cout << "\033[1;32mDepartment added successfully\033[0m \n\n";
 			waitMenu();
 			logging::Info("Department added for Id: ", std::to_string(getId()));
 			return true;
@@ -128,7 +136,12 @@ bool Model::Department::updateDepartment() {
 	try {
 		system("cls");
 		std::string query = "update Department set ";
-		setId(std::stoi(input("Enter the Did to update Department : ", idRegex).value()));
+		if (auto temp = input("Enter Department ID: ", idRegex); temp.has_value()) setId(std::stoi(temp.value()));
+		else {
+			std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
+			waitMenu();
+			return false;
+		}
 
 		std::string select = "select * from Department where id = " + std::to_string(getId()) + " ;";
 		DB::Database::getInstance().selectQuery(select.c_str());
@@ -157,19 +170,36 @@ bool Model::Department::updateDepartment() {
 					return true;
 
 				case 1:
-					setName();
+					if (auto temp = input("Enter Department Name: ", alphaRegex); temp.has_value()) setName(temp.value());
+					else {
+						std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
 					mp.erase("Dname");
 					mp.insert({ "Dname" , Dname });
 					break;
 
 				case 2:
-					setManagerId(std::stoi(input("Enter Manager ID Id: ", idRegex).value()));
+
+					if (auto temp = input("Enter  Manager ID: ", idRegex); temp.has_value()) setManagerId(std::stoi(temp.value()));
+					else {
+						std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
 					mp.erase("manager_id");
 					mp.insert({ "manager_id" , std::to_string(manager_id) });
 					break;
 
 				case 3:
-					setDescription();
+
+					if (auto temp = input("Enter Department Description: ", allRegex); temp.has_value()) setDescription(temp.value());
+					else {
+						std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
 					mp.erase("description");
 					mp.insert({ "description" , description });
 					break;
@@ -208,7 +238,7 @@ bool Model::Department::updateDepartment() {
 				return false;
 			}
 			else if (rc == 0) {
-				std::cout << "Department Updated successfully \n\n";
+				std::cout << "\033[1;32mDepartment Updated successfully\033[0m \n\n\n\n";
 				waitMenu();
 				logging::Info("Department Updated with Id: ", std::to_string(getId()));
 				return true;
@@ -218,7 +248,6 @@ bool Model::Department::updateDepartment() {
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
-		std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}
@@ -243,13 +272,23 @@ bool Model::Department::deleteDepartment() {
 				return true;
 
 			case 1:
-				setId(std::stoi(input("Enter Did: ", idRegex).value()));
+				if (auto temp = input("Enter Department ID: ", idRegex); temp.has_value()) setId(std::stoi(temp.value()));
+				else {
+					std::cout << "\x1b[33mDeletion Failed!!! \x1b[0m\n";
+					waitMenu();
+					return false;
+				}
 				query += "id = " + std::to_string(getId()) + ";";
 				//std::cout << query;  
 
 				break;
 			case 2:
-				setName();
+				if (auto temp = input("Enter Department Name: ", alphaRegex); temp.has_value()) setName(temp.value());
+				else {
+					std::cout << "\x1b[33mDeletion Failed!!! \x1b[0m\n";
+					waitMenu();
+					return false;
+				}
 				query += "Dname = '" + getName() + "';";
 				//std::cout << query;
 				break;
@@ -272,7 +311,7 @@ bool Model::Department::deleteDepartment() {
 			}
 			else {
 
-				std::cout << "Department Deleted successfully \n\n";
+				std::cout << "\033[1;32mDepartment Deleted successfully\033[0m \n\n \n\n";
 				waitMenu();
 				logging::Info("Department Deleted with Id: ", std::to_string(getId()));
 				return true;
@@ -287,7 +326,6 @@ bool Model::Department::deleteDepartment() {
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
-		std::cout << "\x1b[33mDeletion Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}

@@ -424,3 +424,28 @@
 28-03-2024 17:06:04 [Deep] [Info] Table created successfully 
 28-03-2024 17:06:04 [Deep] [Info] Table created successfully 
 28-03-2024 17:06:04 [Deep] [Info] Table created successfully 
+28-03-2024 17:25:35 [Deep] [Info] Database Open Successfully 
+28-03-2024 17:25:35 [Deep] [Info] Table created successfully 
+28-03-2024 17:25:35 [Deep] [Info] Table created successfully 
+28-03-2024 17:25:35 [Deep] [Info] Table created successfully 
+28-03-2024 17:25:35 [Deep] [Info] Table created successfully 
+28-03-2024 17:25:35 [Deep] [Info] Table created successfully 
+28-03-2024 17:26:21 [Deep] [Info] Department added for Id:  2 
+28-03-2024 17:27:10 [Deep] [Info] Department Updated with Id:  2 
+28-03-2024 17:27:22 [Deep] [Info] Department Updated with Id:  2 
+28-03-2024 17:29:21 [Deep] [Info] Department Deleted with Id:  2 
+28-03-2024 17:30:06 [Deep] [Info] Database Open Successfully 
+28-03-2024 17:30:06 [Deep] [Info] Table created successfully 
+28-03-2024 17:30:06 [Deep] [Info] Table created successfully 
+28-03-2024 17:30:06 [Deep] [Info] Table created successfully 
+28-03-2024 17:30:06 [Deep] [Info] Table created successfully 
+28-03-2024 17:33:09 [Deep] [Info] Database Open Successfully 
+28-03-2024 17:33:09 [Deep] [Info] Table created successfully 
+28-03-2024 17:33:09 [Deep] [Info] Table created successfully 
+28-03-2024 17:33:09 [Deep] [Info] Table created successfully 
+28-03-2024 17:33:09 [Deep] [Info] Table created successfully 
+28-03-2024 18:48:06 [Deep] [Info] Database Open Successfully 
+28-03-2024 18:48:06 [Deep] [Info] Table created successfully 
+28-03-2024 18:48:06 [Deep] [Info] Table created successfully 
+28-03-2024 18:48:06 [Deep] [Info] Table created successfully 
+28-03-2024 18:48:06 [Deep] [Info] Table created successfully 

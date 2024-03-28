@@ -23,15 +23,7 @@ namespace Model {
         std::string getProjectTitle() const { return project_title; }
 
         void setManagementExperience(const int& yrs) { management_experience = yrs; }
-        void setProjectTile() {
-            std::string desc;
-            std::string msg = " Enter # to leave the field Empty: \n";
-            std::cout << "Enter Project Title OR " + msg;
-            std::cin.ignore();
-            std::getline(std::cin, desc);
-            if (desc == "#") desc = "";
-            project_title = desc;
-        }
+        void setProjectTile(const std::string_view& title) { project_title = title; }
 
         bool viewManager();
         bool insertManager();

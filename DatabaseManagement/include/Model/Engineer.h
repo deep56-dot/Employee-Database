@@ -21,15 +21,7 @@ namespace Model {
         std::string getSpecialization() const { return specialization; }
 
         void setProgramming_language(const std::string_view& lang) { programming_language = lang; }
-        void setSpecialization() {
-            std::string specs;
-            std::string msg = " Enter # to leave the field Empty: \n";
-            std::cout << "Enter Specialization OR " + msg;
-            std::cin.ignore();
-            std::getline(std::cin, specs);
-            if (specs == "#") specs = "";
-            specialization = specs;
-        }
+        void setSpecialization(const std::string_view& specs) { specialization = specs; }
 
         bool viewEngineer();
         bool insertEngineer();

@@ -72,8 +72,8 @@ bool Model::Table::createTable() {
 		sql += ");";
 
 		std::cout << sql;
-		int rc{};
-		//int rc = DB::Database::getInstance().executeQuery(sql.c_str()); 
+		//int rc{}; 
+		int rc = DB::Database::getInstance().executeQuery(sql.c_str());
 		if (rc == 0) {
 			std::cout << "\n\x1b[32mTable created Suceesfully\x1b[0m\n\n";
 			waitMenu();
@@ -241,7 +241,7 @@ std::vector<Model::Table> Model::Table::getAllTables() {
 }
 
 void Model::Table::writeCSV() {
-	std::filesystem::path p{ "C:\\Users\\ZTI\\OneDrive - ZURU INC\\C++ Training\\DatabaseManagement\\DatabaseManagement\\Backup\\" };
+	std::filesystem::path p{ "C:\\Users\\ZTI\\OneDrive - ZURU INC\\C++\\EmployeeDatabase\\EmployeeDatabase\\BackUp\\" };
 
 	auto tables = getAllTables();
 	for (auto& table : tables) {
@@ -330,12 +330,20 @@ bool Model::Table::insertRecord() {
 
 		for (auto& [field, type] : columnType) {
 			if (std::find(numericType.begin(), numericType.end(), type) != numericType.end()) {
-				auto value = input("Enter " + field + ": ", idRegex).value_or("0");
-				row.insert({ field , value });
+				if (auto tmp = input("Enter " + field + ": ", idRegex); tmp.has_value()) row.insert({ field , tmp.value() });
+				else {
+					std::cout << "\x1b[33m Insertion Failed!!! \x1b[0m\n";
+					waitMenu();
+					return false;
+				}
 			}
 			else {
-				auto value = input("Enter " + field + " : ", alphaRegex).value_or("");
-				row.insert({ field , value });
+				if (auto tmp = input("Enter " + field + ": ", alphaRegex); tmp.has_value()) row.insert({ field , tmp.value() });
+				else {
+					std::cout << "\x1b[33m Insertion Failed!!! \x1b[0m\n";
+					waitMenu();
+					return false;
+				}
 			}
 		}
 
@@ -368,10 +376,16 @@ bool Model::Table::insertRecord() {
 			waitMenu();
 			return true;
 		}
+		else if (rc == 19) {
+			std::cout << "\x1b[33mEntered Data is not available in particular table Or entered Record is already exist \x1b[0m\n\n";
+			waitMenu();
+			return false;
+		}
 		return false;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
+		std::cout << "\x1b[33m Insertion Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}
@@ -390,58 +404,87 @@ bool Model::Table::updateRecord() {
 		}
 		row.clear();
 
-		auto id = input("Enter id to update record: ", idRegex).value();
-
-		std::cout << "Enter # to keep the field as it is \n\n";
-
-		for (auto& [field, type] : columnType) {
-
-			if (field == "id") continue;
-			if (std::find(numericType.begin(), numericType.end(), type) != numericType.end()) {
-				auto value = input("Enter " + field + ": ", digitRegex, true).value_or("0");
-				if (value == "0") continue;
-				row.insert({ field , value });
-			}
-			else {
-				auto value = input("Enter " + field + ": ", alphaRegex).value_or("");
-				if (value == "") continue;
-				row.insert({ field , value });
-			}
+		auto id = input("Enter id to Update records:", idRegex);
+		if (!id.has_value()) {
+			std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+			waitMenu();
+			return false;
 		}
 
-		std::string query;
-		if (row.size() != 0) {
-			query += "update " + name + " set ";
-			for (auto& [field, value] : row) {
-				if (std::find(numericType.begin(), numericType.end(), columnType[field]) != numericType.end()) {
-					if (field == "id") continue;
-					query += field + "=" + value + ",";
+		std::string select = "select * from " + name + " where id = " + id.value() + " ;";
+		DB::Database::getInstance().selectQuery(select.c_str());
+		if (DB::Database::row == 0) {
+			std::cout << "Entered Record is not in database\n\n";
+			waitMenu();
+			return false;
+		}
+		else {
+			system("cls");
+			std::cout << "Enter # to keep the field as it is \n\n";
+			std::string tmp;
+			for (auto& [field, type] : columnType) {
+
+				if (field == "id") continue;
+				if (std::find(numericType.begin(), numericType.end(), type) != numericType.end()) {
+
+					if (auto tmp = input("Enter " + field + ": ", idRegex); tmp.has_value()) {
+						if (tmp == "0") continue;
+						row.insert({ field , tmp.value() });
+					}
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
+
 				}
 				else {
-					query += field + "= '" + value + "' ,";
+					if (auto tmp = input("Enter " + field + ": ", alphaRegex); tmp.has_value()) {
+						if (tmp == "0") continue;
+						row.insert({ field , tmp.value() });
+					}
+					else {
+						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+						waitMenu();
+						return false;
+					}
 				}
 			}
 
-			query.erase(query.find_last_of(','), 1);
+			std::string query;
+			if (row.size() != 0) {
+				query += "update " + name + " set ";
+				for (auto& [field, value] : row) {
+					if (std::find(numericType.begin(), numericType.end(), columnType[field]) != numericType.end()) {
+						if (field == "id") continue;
+						query += field + "=" + value + ",";
+					}
+					else {
+						query += field + "= '" + value + "' ,";
+					}
+				}
 
-			query += " where id = " + id + ";";
+				query.erase(query.find_last_of(','), 1);
+
+				query += " where id = " + id.value() + ";";
+			}
+
+			//std::cout << query;
+
+			int rc = DB::Database::getInstance().executeQuery(query.c_str());
+
+			if (rc == 0) {
+				std::cout << "\x1b[32min " + name + ": Record updated successfully with id " + id.value() + "\x1b[0m\n";
+				logging::Info(name + ": Record updated successfully with id " + id.value());
+				waitMenu();
+				return true;
+			}
+			return false;
 		}
-
-		//std::cout << query;
-
-		int rc = DB::Database::getInstance().executeQuery(query.c_str());
-
-		if (rc == 0) {
-			std::cout << "\x1b[32min " + name + ": Record updated successfully with id " + id + "\x1b[0m\n";
-			logging::Info(name + ": Record updated successfully with id " + id);
-			waitMenu();
-			return true;
-		}
-		return false;
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
-		std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
+		std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}
@@ -459,22 +502,49 @@ bool Model::Table::deleteRecord() const {
 			return true;
 		}
 
-		auto id = input("Enter id to delete records:", idRegex).value();
-
-		std::string query = "delete from " + name + " where id = " + id + " ;";
-
-		int rc = DB::Database::getInstance().executeQuery(query.c_str());
-		if (rc == 0) {
-			std::cout << "\x1b[32mRecord deleted successfully from " + name + "\x1b[0m\n";
-			logging::Info(name + ": Record deleted successfully with id " + id);
+		auto id = input("Enter id to delete records:", idRegex);
+		if (!id.has_value()) {
+			std::cout << "\x1b[33m Deletion Failed!!! \x1b[0m\n";
 			waitMenu();
-			return true;
+			return false;
 		}
-		return false;
+
+		std::string select = "select * from " + name + " where id = " + id.value() + " ;";
+		DB::Database::getInstance().selectQuery(select.c_str());
+		if (DB::Database::row == 0) {
+			std::cout << "Entered Record is not in database\n\n";
+			waitMenu();
+			return false;
+		}
+		else {
+			std::string query = "delete from " + name + " where id = " + id.value() + " ;";
+
+			int rc = DB::Database::getInstance().executeQuery(query.c_str());
+			if (rc == 0) {
+				int change = sqlite3_changes(DB::Database::getInstance().db);
+				if (change == 0) {
+					std::cout << "\x1b[33m Entered Record is not in database\x1b[0m\n";
+					waitMenu();
+					return false;
+				}
+				else {
+					std::cout << "\x1b[32m Record deleted successfully from " + name + "\x1b[0m\n";
+					logging::Info(name + ": Record deleted successfully with id " + id.value());
+					waitMenu();
+					return true;
+				}
+			}
+			else if (rc == 19) {
+				std::cout << "\x1b[33m You can not delete Record because Some other records are dependent on it \x1b[0m\n\n";
+				waitMenu();
+				return false;
+			}
+			return false;
+		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
-		std::cout << "\x1b[33mDeletion Failed!!! \x1b[0m\n";
+		std::cout << "\x1b[33m Deletion Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}
@@ -485,7 +555,6 @@ bool Model::Table::viewRecord() const {
 	system("cls");
 	try {
 		auto id = input("Enter id to view records: ", idRegex).value_or("0");
-
 		std::string query = "select * from " + name + " where id = " + id + " ;";
 		int rc = DB::Database::getInstance().selectQuery(query.c_str());
 		waitMenu();
@@ -520,7 +589,7 @@ void Model::Table::action() noexcept {
 		std::cout << "-> " << table.getname() << "\n";
 	}
 
-	std::string tableName = input("Enter the name of the table you want to access from above tables: ", alphaRegex).value_or("");
+	std::string tableName = input("Enter the name of the table you want to access from above tables: ", alphaRegex).value();
 	auto t = getTable(tableName);
 	if (t.has_value()) {
 		auto ch{ true };
