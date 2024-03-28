@@ -69,7 +69,7 @@ namespace Model {
         bool insertEmployee();
         bool deleteEmployee();
         bool updateEmployee();
-        void userInputEmployee();
+        bool userInputEmployee();
         void action() noexcept;
 
     private:

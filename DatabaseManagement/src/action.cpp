@@ -16,7 +16,7 @@ void action(int j) noexcept {
 		std::cout << "5. Go to Main Menu\n\n";
 
 		int i;
-		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[1-5]" }));
+		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[1-5]" }).value_or("5"));
 		Model::Engineer e;
 		Model::Manager m;
 		Model::Department d;

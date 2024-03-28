@@ -4,6 +4,8 @@
 #include<iostream>
 #include<string>
 #include<string_view>
+#include<filesystem>
+#include<fstream>
 #include<vector>
 #include<map>
 #include<optional>
@@ -19,22 +21,27 @@ namespace Model {
 
 	public:
 		bool createTable();
-		void showTables();
+		void showTables() noexcept;
 		bool deleteTable();
-		void infoTable();
-
-		bool insertRecord();
-		bool deleteRecord();
-		bool updateRecord();
-		bool viewRecord();
-		bool viewAllRecords();
+		void infoTable() noexcept;
 		static std::optional<Table> getTable(const std::string& tableName);
 		static std::vector<Model::Table> getAllTables();
 
 		void writeCSV();
 		bool exportToCsv(const std::string_view&, const std::filesystem::path&);
 
-		void action();
+		bool insertRecord();
+		bool updateRecord();
+		bool deleteRecord() const;
+		bool viewRecord() const;
+		bool viewAllRecords() const;
+
+		void action() noexcept;
+
+
+		std::string getname() noexcept {
+			return name;
+		}
 
 	private:
 		std::string name;

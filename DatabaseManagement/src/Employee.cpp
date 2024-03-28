@@ -16,7 +16,7 @@ bool Model::Employee::viewEmployee() {
 		std::cout << "5. Manager Id\n";
 		std::cout << "6. ALL\n\n";
 		int i;
-		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-6]" }));
+		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-6]" }).value_or("0"));
 		std::string tmp;
 		while (1) {
 			switch (i) {
@@ -66,6 +66,8 @@ bool Model::Employee::viewEmployee() {
 			break;
 		}
 		if (DB::Database::row == 0) {
+			std::cout << "\x1b[38;5;208mEmployee Not Available\x1b[0m\n";
+			waitMenu();
 			return false;
 		}
 		return true;
@@ -119,7 +121,7 @@ bool Model::Employee::insertEmployee() {
 bool Model::Employee::updateEmployee() {
 	try {
 		std::string query = "update Employee set ";
-		setId(std::stoi(input("Enter the Eid to update Employee : ", idRegex)));
+		setId(std::stoi(input("Enter the Eid to update Employee : ", idRegex).value()));
 
 		std::string select = "select * from Employee where Eid = " + std::to_string(getId()) + " ;";
 		DB::Database::getInstance().selectQuery(select.c_str());
@@ -149,33 +151,33 @@ bool Model::Employee::updateEmployee() {
 				std::cout << "10. departmentId\n";
 				std::cout << "11. toUpdateDatabase\n";
 				std::string value;
-				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-1]$" }));
+				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-1]$" }).value_or("0"));
 				switch (i) {
 				case 0:
 					return true;
 
 				case 1:
-					//setFirstname(input("Enter firstname: ", alphaRegex));
+					//setFirstname(input("Enter firstname: ", alphaRegex).value());
 					mp.insert({ "firstname" , firstname });
 					break;
 
 				case 2:
-					//setLastname(input("Enter LastName: " , alphaRegex));
+					//setLastname(input("Enter LastName: " , alphaRegex).value());
 					mp.insert({ "lastname" ,  lastname });
 					break;
 
 				case 3:
-					//setDob(input("Enter DOB (dd-mm-yyyy): " , dateRegex));
+					//setDob(input("Enter DOB (dd-mm-yyyy): " , dateRegex).value());
 					mp.insert({ "dob" , dob });
 					break;
 
 				case 4:
-					//setMobile(input("Enter Mobile: " , mobileRegex));
+					//setMobile(input("Enter Mobile: " , mobileRegex).value());
 					mp.insert({ "mobile" , mobile });
 					break;
 
 				case 5:
-					//setEmail(input("Enter Email: ", emailRegex));
+					//setEmail(input("Enter Email: ", emailRegex).value());
 					mp.insert({ "email" , email });
 					break;
 
@@ -185,23 +187,23 @@ bool Model::Employee::updateEmployee() {
 					break;
 
 				case 7:
-					/*value = input("Enter Gender (Male/Female/Other: )", genderRegex);
+					/*value = input("Enter Gender (Male/Female/Other: )", genderRegex).value();
 					mp.insert({ "gender" , value });*/
 					mp.insert({ "gender" , "Male" });
 					break;
 
 				case 8:
-					//setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					//setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex).value());
 					mp.insert({ "doj" , doj });
 					break;
 
 				case 9:
-					//setManagerId(stoi(input("Enter Manager Id: ", idRegex))); 
+					//setManagerId(stoi(input("Enter Manager Id: ", idRegex).value())); 
 					mp.insert({ "manager_id" , std::to_string(manager_id) });
 					break;
 
 				case 10:
-					//setDepartmentId(stoi(input("Enter Department Id: ", idRegex))); 
+					//setDepartmentId(stoi(input("Enter Department Id: ", idRegex).value())); 
 					mp.insert({ "department_id" , std::to_string(department_id) });
 					break;
 
@@ -250,6 +252,7 @@ bool Model::Employee::updateEmployee() {
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
+		std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}
@@ -268,7 +271,7 @@ bool Model::Employee::deleteEmployee() {
 		std::cout << "1. Eid\n";
 		std::cout << "2. email\n\n";
 
-		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-2]" }));
+		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-2]" }).value_or("0"));
 		std::cout << "\n";
 		std::string tmp;
 		while (1) {
@@ -277,12 +280,12 @@ bool Model::Employee::deleteEmployee() {
 				return true;
 
 			case 1:
-				setId(std::stoi(input("Enter Eid: ", idRegex)));
+				setId(std::stoi(input("Enter Eid: ", idRegex).value()));
 				query1 += "Eid = " + std::to_string(getId()) + ";";
 				break;
 
 			case 2:
-				setEmail(input("Enter email: ", emailRegex));
+				setEmail(input("Enter email: ", emailRegex).value());
 				query1 += "email = '" + getEmail() + "';";
 				break;
 
@@ -320,6 +323,7 @@ bool Model::Employee::deleteEmployee() {
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
+		std::cout << "\x1b[33mDeletion Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}
@@ -329,19 +333,19 @@ void Model::Employee::action() noexcept {
 
 }
 
-void Model::Employee::userInputEmployee() {
+bool Model::Employee::userInputEmployee() {
 	try {
 
 		std::string msg = " Enter # to leave the field Empty: \n";
-		setId(stoi(input("Enter Eid: ", idRegex)));
-		setFirstname(input("Enter FirstName OR " + msg, alphaRegex));
-		setLastname(input("Enter LastName OR " + msg, alphaRegex));
-		setDob(input("Enter DOB (dd-mm-yyyy) OR " + msg, dateRegex));
-		setMobile(input("Enter Mobile OR " + msg, mobileRegex));
-		setEmail(input("Enter Email OR " + msg, emailRegex));
+		setId(stoi(input("Enter Eid: ", idRegex).value()));
+		setFirstname(input("Enter FirstName OR " + msg, alphaRegex).value());
+		setLastname(input("Enter LastName OR " + msg, alphaRegex).value());
+		setDob(input("Enter DOB (dd-mm-yyyy) OR " + msg, dateRegex).value());
+		setMobile(input("Enter Mobile OR " + msg, mobileRegex).value());
+		setEmail(input("Enter Email OR " + msg, emailRegex).value());
 		setAddress();
 
-		string gender = input("Enter Gender(Male / Female / Other): ", genderRegex);
+		string gender = input("Enter Gender(Male / Female / Other): ", genderRegex).value();
 		if (gender == "Male") {
 			setGender(Gender::Male);
 		}
@@ -352,13 +356,15 @@ void Model::Employee::userInputEmployee() {
 			setGender(Gender::Other);
 		}
 
-		setDoj(input("Enter DOJ(dd-mm-yyyy) OR " + msg, dateRegex));
-		setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
-		setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+		setDoj(input("Enter DOJ(dd-mm-yyyy) OR " + msg, dateRegex).value());
+		setManagerId(stoi(input("Enter Manager Id: ", idRegex).value()));
+		setDepartmentId(stoi(input("Enter Department Id: ", idRegex).value()));
 		s.userInputSalary();
+		return true;
 	}
 	catch (std::exception& e) {
-		std::cout << e.what() << std::endl;
-		waitMenu();
+		/*std::cout << e.what() << std::endl;
+		waitMenu();*/
+		return false;
 	}
 }

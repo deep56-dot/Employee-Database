@@ -23,7 +23,7 @@ int main() {
 		std::cout << "7. Exit\n\n";
 
 		int i;
-		i = std::stoi(input("Enter Choice: ", std::regex{ "[1-7]" }));
+		i = std::stoi(input("Enter Choice: ", std::regex{ "[1-7]" }).value_or("7"));
 		switch (i) {
 		case 1:
 			t.createTable();

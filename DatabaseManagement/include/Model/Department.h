@@ -12,6 +12,7 @@
 #include "../LOG/log.h"
 #include "../LOG/logger.h"
 
+using namespace utility;
 
 namespace Model {
     class Department {
@@ -57,7 +58,7 @@ namespace Model {
         bool insertDepartment();
         bool deleteDepartment();
         bool updateDepartment();
-        void userInput();
+        bool userInputDepartment();
         void action() noexcept;
 
     private:

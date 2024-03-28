@@ -37,7 +37,7 @@ namespace Model {
         bool insertManager();
         bool deleteManager();
         bool updateManager();
-        void userInputManager();
+        bool userInputManager();
         void action() noexcept;
 
     private:

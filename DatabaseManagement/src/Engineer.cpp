@@ -1,16 +1,20 @@
 #include "../include/Model/Engineer.h"
 
-void Model::Engineer::userInputEngineer() {
+bool Model::Engineer::userInputEngineer() {
 	try {
 		std::string msg = " Enter # to leave the field Empty: \n";
 		system("cls");
-		userInputEmployee();
-		setProgramming_language(input("Enter Programming Language  OR " + msg, allRegex));
+		if (!userInputEmployee()) {
+			return false;
+		}
+		setProgramming_language(input("Enter Programming Language  OR " + msg, allRegex).value());
 		setSpecialization();
+		return true;
 	}
 	catch (std::exception& e) {
-		std::cout << e.what() << std::endl;
-		waitMenu();
+	/*	std::cout << e.what() << std::endl;
+		waitMenu();*/
+		return false;
 	}
 }
 
@@ -29,7 +33,7 @@ bool Model::Engineer::viewEngineer() {
 		std::cout << "5. Manager Id\n";
 		std::cout << "6. ALL\n\n";
 		int i;
-		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-6]" }));
+		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-6]" }).value_or("0"));
 
 		std::string tmp1;
 		while (1) {
@@ -81,6 +85,8 @@ bool Model::Engineer::viewEngineer() {
 			int rc = DB::Database::getInstance().selectQuery(query1.c_str());
 		}
 		if (DB::Database::row == 0) {
+			std::cout << "\x1b[38;5;208mEngineer Not Available\x1b[0m\n";
+			waitMenu();
 			return false;
 		}
 		waitMenu();
@@ -98,10 +104,14 @@ bool Model::Engineer::insertEngineer() {
 		system("cls");
 		std::cout << "If you want to go back press 0 Otherwise press 1\n";
 		int i;
-		if (std::cin >> i;  i == 0) {
+		if (i = std::stoi(input("", std::regex{ "^[0-1]$" }).value_or("0"));  i == 0) {
 			return true;
 		}
-		userInputEngineer();
+		if (!userInputEngineer()) {
+			std::cout << "\x1b[33mInsertion Failed!!! \x1b[0m\n";
+			waitMenu();
+			return false;
+		}
 
 		if (auto ch = insertEmployee(); ch) {
 			std::string query = "";
@@ -138,7 +148,7 @@ bool Model::Engineer::updateEngineer() {
 
 		std::string query1 = "update Employee set ";
 		std::string query2 = "update Engineer set ";
-		setId(std::stoi(input("Enter the Eid to update Engineer : ", idRegex)));
+		setId(std::stoi(input("Enter the Eid to update Engineer : ", idRegex).value()));
 
 		std::string select = "select * from Engineer where id = " + std::to_string(getId()) + " ;";
 		DB::Database::getInstance().selectQuery(select.c_str());
@@ -172,33 +182,33 @@ bool Model::Engineer::updateEngineer() {
 				std::cout << "12. Specification \n";
 				std::cout << "13. ToUpdateDatabase\n\n";
 				std::string value;
-				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-3]$" }));
+				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-3]$" }).value_or("0"));
 				switch (i) {
 				case 0:
 					return true;
 
 				case 1:
-					setFirstname(input("Enter firstname: ", alphaRegex));
+					setFirstname(input("Enter firstname: ", alphaRegex).value());
 					mp1.insert({ "firstname" , getFirstname() });
 					break;
 
 				case 2:
-					setLastname(input("Enter LastName: ", alphaRegex));
+					setLastname(input("Enter LastName: ", alphaRegex).value());
 					mp1.insert({ "lastname" ,  getLastname() });
 					break;
 
 				case 3:
-					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex));
+					setDob(input("Enter DOB (dd-mm-yyyy): ", dateRegex).value());
 					mp1.insert({ "dob" , getDob() });
 					break;
 
 				case 4:
-					setMobile(input("Enter Mobile: ", mobileRegex));
+					setMobile(input("Enter Mobile: ", mobileRegex).value());
 					mp1.insert({ "mobile" , getMobile() });
 					break;
 
 				case 5:
-					setEmail(input("Enter Email: ", emailRegex));
+					setEmail(input("Enter Email: ", emailRegex).value());
 					mp1.insert({ "email" , getEmail() });
 					break;
 
@@ -208,26 +218,26 @@ bool Model::Engineer::updateEngineer() {
 					break;
 
 				case 7:
-					value = input("Enter Gender (Male/Female/Other: )", genderRegex);
+					value = input("Enter Gender (Male/Female/Other: )", genderRegex).value();
 					mp1.insert({ "gender" , value });
 					break;
 
 				case 8:
-					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex));
+					setDoj(input("Enter DOJ(dd-mm-yyyy): ", dateRegex).value());
 					mp1.insert({ "doj" , getDoj() });
 					break;
 				case 9:
-					setManagerId(stoi(input("Enter Manager Id: ", idRegex)));
+					setManagerId(stoi(input("Enter Manager Id: ", idRegex).value()));
 					mp1.insert({ "manager_id" , std::to_string(getManagerId()) });
 					break;
 
 				case 10:
-					setDepartmentId(stoi(input("Enter Department Id: ", idRegex)));
+					setDepartmentId(stoi(input("Enter Department Id: ", idRegex).value()));
 					mp1.insert({ "department_id" , std::to_string(getDepartmentId()) });
 					break;
 
 				case 11:
-					setProgramming_language(input("Enter Programming Language: ", allRegex));
+					setProgramming_language(input("Enter Programming Language: ", allRegex).value());
 					mp2.erase("programming_language");
 					mp2.insert({ "programming_language" , value });
 					break;
@@ -307,6 +317,7 @@ bool Model::Engineer::updateEngineer() {
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
+		std::cout << "\x1b[33mUpdation Failed!!! \x1b[0m\n";
 		waitMenu();
 		return false;
 	}

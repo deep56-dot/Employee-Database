@@ -31,7 +31,7 @@ namespace Model {
         void setBonus(const double& figure) { bonus = figure; }
 
         bool viewSalary();
-        void userInputSalary();
+        bool userInputSalary();
         bool insertSalary(int id) const;
         double increment(double, int);
         bool deleteSalary();

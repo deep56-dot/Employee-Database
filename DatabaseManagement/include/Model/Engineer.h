@@ -35,7 +35,7 @@ namespace Model {
         bool insertEngineer();
         bool deleteEngineer();
         bool updateEngineer();
-        void userInputEngineer();
+        bool userInputEngineer();
         void action() noexcept;
 
     private:

@@ -16,7 +16,7 @@ void menu() noexcept {
 		std::cout << "5. To exit \n\n";
 
 		int i;
-		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[1-5]" }));
+		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[1-5]" }).value_or("5"));
 
 		switch (i) {
 		case 1:  case 2:  case 3:
