@@ -3,12 +3,20 @@
 #include "include/DBmanage.h"
 #include "include/Helper.h"
 #include "include/Model/Table.h"
+#include "include/Views/EmpView.h"
 
 void menu();
 
 int main() {
 	DB::Database::getInstance().open("Emp.db");
-	auto ch{ true };
+	auto emp = userInputEmployee();
+	if (emp.has_value()) {
+		emp.value().insertEmployee();
+	}
+	Model::Employee e1;
+	e1.viewEmployee();
+	e1.updateEmployee();
+	/*auto ch{ true };
 	Model::Table t;
 	while (ch) {
 		system("cls");
@@ -56,7 +64,7 @@ int main() {
 		default:
 			std::cout << "Enter valid input: \n";
 		}
-	}
+	}*/
 
 	
 }

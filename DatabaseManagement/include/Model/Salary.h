@@ -2,6 +2,8 @@
 #define _Salary_
 #include <iostream> 
 #include <map> 
+#include <string> 
+#include <optional> 
 #include "../Helper.h"
 #include "../Regex.h"
 #include "../DBmanage.h"
@@ -31,7 +33,7 @@ namespace Model {
         void setBonus(const double& figure) { bonus = figure; }
 
         bool viewSalary();
-        bool userInputSalary();
+        //bool userInputSalary();
         bool insertSalary(int id) const;
         double increment(double, int);
         bool deleteSalary();

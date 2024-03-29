@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\Views\EmpView.cpp" />
+    <ClCompile Include="include\Views\SalaryView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite\shell.c" />
     <ClCompile Include="sqlite\sqlite3.c" />
@@ -172,6 +174,8 @@
     <ClInclude Include="include\Model\Salary.h" />
     <ClInclude Include="include\Model\Table.h" />
     <ClInclude Include="include\Regex.h" />
+    <ClInclude Include="include\Views\EmpView.h" />
+    <ClInclude Include="include\Views\SalaryView.h" />
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
   </ItemGroup>

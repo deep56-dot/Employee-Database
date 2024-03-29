@@ -1,25 +1,25 @@
 #include "../include/Model/Salary.h"
 
-bool Model::Salary::userInputSalary() {
-
-	try {
-		std::string msg = " Enter # to leave the field Empty: \n";
-
-		if (auto tmp = input("Enter Base Salary OR " + msg, salaryRegex, true); tmp.has_value()) setBaseSalary(std::stof(tmp.value()));
-		else return false;
-
-		if (auto tmp = input("Enter Bonus OR " + msg, salaryRegex, true); tmp.has_value()) setBonus(std::stof(tmp.value()));
-		else return false;
-
-		setAmount(base_salary + bonus);
-		return true;
-	}
-	catch (std::exception& e) {
-		std::cout << e.what() << std::endl;
-		waitMenu();
-		return false;
-	}
-}
+//std::optional<string> Model::Salary::userInputSalary() {
+//
+//	try {
+//		std::string msg = " Enter # to leave the field Empty: \n";
+//
+//		if (auto tmp = input("Enter Base Salary OR " + msg, salaryRegex, true); tmp.has_value()) setBaseSalary(std::stof(tmp.value()));
+//		else return false;
+//
+//		if (auto tmp = input("Enter Bonus OR " + msg, salaryRegex, true); tmp.has_value()) setBonus(std::stof(tmp.value()));
+//		else return false;
+//
+//		setAmount(base_salary + bonus);
+//		return true;
+//	}
+//	catch (std::exception& e) {
+//		std::cout << e.what() << std::endl;
+//		waitMenu();
+//		return false;
+//	}
+//}
 
 double Model::Salary::increment(double percentage, int id) {
 	try {

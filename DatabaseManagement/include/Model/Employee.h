@@ -19,6 +19,8 @@ enum class Gender { Male = 0, Female, Other };
 using namespace std;
 using namespace utility;
 
+
+std::optional<std::pair<string, string>> viewEmp();
 namespace Model {
     class Employee {
 
@@ -55,14 +57,15 @@ namespace Model {
         void setDoj(const std::string_view& str) { doj = str; }
         void setManagerId(const int& id) { manager_id = id; }
         void setDepartmentId(const int& id) { department_id = id; }
-
+        static std::optional<Model::Employee> getEmployee(const std::string& id);
 
         bool viewEmployee();
         bool insertEmployee();
         bool deleteEmployee();
         bool updateEmployee();
-        bool userInputEmployee();
+        //bool userInputEmployee();
         void action() noexcept;
+        Model::Salary s{};
 
     private:
         int Eid{};
@@ -76,7 +79,6 @@ namespace Model {
         std::string doj{};
         int manager_id{};
         int department_id{};
-        Model::Salary s{};
     };
 }
 

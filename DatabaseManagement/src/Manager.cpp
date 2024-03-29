@@ -5,7 +5,7 @@ bool Model::Manager::userInputManager() {
 	try {
 		std::string msg = " Enter # to leave the field Empty: \n";
 		system("cls");
-		if (!userInputEmployee()) return false;
+		//if (!userInputEmployee()) return false;
 
 		if (auto tmp = input("Enter Management Experience OR " + msg, digitRegex); tmp.has_value()) setManagementExperience(std::stoi(tmp.value()));
 		else return false;
