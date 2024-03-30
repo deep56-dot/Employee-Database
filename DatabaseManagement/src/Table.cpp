@@ -241,7 +241,7 @@ std::vector<Model::Table> Model::Table::getAllTables() {
 }
 
 void Model::Table::writeCSV() {
-	std::filesystem::path p{ "C:\\Users\\ZTI\\OneDrive - ZURU INC\\C++\\EmployeeDatabase\\EmployeeDatabase\\BackUp\\" };
+	std::filesystem::path p{ "C:\\Users\\dell\\OneDrive - ZURU INC\\C++ Training\\DatabaseManagement\\DatabaseManagement\\Backup" };
 
 	auto tables = getAllTables();
 	for (auto& table : tables) {

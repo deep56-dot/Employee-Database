@@ -81,29 +81,43 @@ bool Model::Employee::insertEmployee() {
 
 bool Model::Employee::updateEmployee() {
 	try {
-
 		auto tmp = updateEmpViewer();
+		//auto tmp = Model::Employee::getEmployee(std::to_string(id));  // For testing
 		if (tmp.has_value()) {
 
 			*this = tmp.value();
 
-			std::string query =  " UPDATE Employee SET  firstname='" + firstname + "', lastname='" + lastname + "', dob='" + dob + "', mobile='" + mobile + "', email='" + email + "', address='" + address + "'WHERE Eid = " + std::to_string(Eid) + ";";
+			std::string query = " UPDATE Employee SET  firstname = '" + firstname + "', lastname = '" + lastname + "', dob = '" + dob + "', mobile = '" + mobile + "', email = '" + email + "', address = '" + address + "', gender = ";
+			if (gender == Gender::Male) {
+				query += "Male";
+			}
+			else if (gender == Gender::Female) {
+				query += "Female";
+			}
+			else {
+				query += "Other";
+			}
 
-			std::cout << query << "\n";
-			waitMenu();
+			query += ", doj = '" + doj + "' , manager_id = " + std::to_string(manager_id) + " , department_id = " + std::to_string(department_id) + " WHERE Eid = " + std::to_string(Eid) + ";";
+			
 			int rc = DB::Database::getInstance().executeQuery(query.c_str());
 
 			if (rc == 19) {
-				std::cerr << "\x1b[33m You can not assigne value because entered manager is not in database \x1b[0m\n\n";
+				std::cerr << "\x1b[33m You can not assigne value because entered manager or department is not in database OR entered employee is already in database \x1b[0m\n\n";
 				waitMenu();
 				return false;
 			}
 			else if (rc == 0) {
-				std::cout << "\x1b[32mEmployee Updated successfully\x1b[0m \n\n";
+				std::cout << "\x1b[32m Employee Updated successfully\x1b[0m \n\n";
 				waitMenu();
 				logging::Info("Employee Updated with Id: ", std::to_string(getId()));
 				return true;
 			}
+		}
+		else {
+			std::cerr << "\x1b[33m Updation Failed \x1b[0m\n\n";
+			waitMenu();
+			return false;
 		}
 	}
 	catch (std::exception& e) {
@@ -164,19 +178,20 @@ std::optional<Model::Employee> Model::Employee::getEmployee(const std::string& i
 	Employee e;
 	auto callback = [](void* data, int argc, char** argv, char** azColName) {
 		Employee* d1 = static_cast<Employee*>(data);
-		d1->setId(argv[0] ? std::stoi(argv[0]) : -1); 
-		d1->setFirstname(argv[1] ? argv[1] : ""); 
+		d1->setId(argv[0] ? std::stoi(argv[0]) : -1);
+		d1->setFirstname(argv[1] ? argv[1] : "");
 		d1->setLastname(argv[2] ? argv[2] : "");
 		d1->setDob(argv[3] ? argv[3] : "");
 		d1->setMobile(argv[4] ? argv[4] : "");
 		d1->setEmail(argv[5] ? argv[5] : "");
 		d1->setAddress(argv[6] ? argv[6] : "");
-		//d1->setGender(static_cast<Gender>(argv[7] )? argv[7] : "");
+		if (argv[7] == "Male") d1->setGender(Gender::Male);
+		else if (argv[7] == "Female") d1->setGender(Gender::Female);
+		else d1->setGender(Gender::Other);
 		d1->setDoj(argv[8] ? argv[8] : "");
 		d1->setManagerId(argv[9] ? std::stoi(argv[9]) : -1);
 		d1->setDepartmentId(argv[10] ? std::stoi(argv[10]) : -1);
 
-		
 		return 0;
 		};
 
@@ -189,9 +204,7 @@ std::optional<Model::Employee> Model::Employee::getEmployee(const std::string& i
 		return std::nullopt;
 	}
 
-	//std::cout << d.getManagerId() << "\n";
-	//waitMenu();
-	std::cout << e.getId();
+	//std::cout << e.getId(); 
 	return e;
 }
 

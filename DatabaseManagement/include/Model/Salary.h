@@ -39,6 +39,7 @@ namespace Model {
         bool deleteSalary();
         bool updateSalary();
         void action() noexcept;
+        static std::optional<Model::Salary> getSalary(const std::string& id);
 
     private:
 

@@ -13,12 +13,12 @@ int main() {
 	if (emp.has_value()) {
 		emp.value().insertEmployee();
 		waitMenu();
-	}*/
+	}
 	Model::Employee e1;
 	e1.viewEmployee();
 	e1.updateEmployee();
-	e1.deleteEmployee();
-	/*auto ch{ true };
+	e1.deleteEmployee();*/
+	auto ch{ true };
 	Model::Table t;
 	while (ch) {
 		system("cls");
@@ -66,7 +66,7 @@ int main() {
 		default:
 			std::cout << "Enter valid input: \n";
 		}
-	}*/
+	}
 
 	
 }
