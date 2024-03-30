@@ -239,7 +239,6 @@ std::optional<Model::Employee> updateEmpViewer() {
 	}
 	return std::nullopt;
 }
-
 std::optional<std::pair<string, string>> viewEmp() {
 	try {
 		std::pair<std::string, std::string> p;
@@ -322,4 +321,22 @@ std::optional<std::pair<string, string>> viewEmp() {
 		return std::nullopt;
 	}
 
+}
+std::optional<Model::Employee> deleteEmpViewer() {
+	try {
+		system("cls");
+		Model::Employee e;
+				if (auto tmp = input("Enter Employee ID for delete Employee: ", idRegex); tmp.has_value()) 
+				{
+					e.setId(std::stoi(tmp.value()));
+				}
+				else {
+					return std::nullopt;
+				}
+			
+		return e;
+	}
+	catch (std::exception e) {
+		return std::nullopt;
+	}
 }

@@ -67,6 +67,8 @@ namespace Model {
         void action() noexcept;
         Model::Salary s{};
 
+        
+
     private:
         int Eid{};
         std::string firstname{};

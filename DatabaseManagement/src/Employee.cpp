@@ -1,5 +1,6 @@
 #include "../include/Model/Employee.h"
 std::optional<Model::Employee> updateEmpViewer();
+std::optional<Model::Employee> deleteEmpViewer();
 
 bool Model::Employee::viewEmployee() {
 	try {
@@ -86,7 +87,7 @@ bool Model::Employee::updateEmployee() {
 
 			*this = tmp.value();
 
-			std::string query =  " UPDATE Department SET  firstname='" + firstname + "', lastname='" + lastname + "', dob='" + dob + "', mobile='" + mobile + "', email='" + email + "', address='" + address + "'WHERE id = " + std::to_string(Eid) + ";";
+			std::string query =  " UPDATE Employee SET  firstname='" + firstname + "', lastname='" + lastname + "', dob='" + dob + "', mobile='" + mobile + "', email='" + email + "', address='" + address + "'WHERE Eid = " + std::to_string(Eid) + ";";
 
 			std::cout << query << "\n";
 			waitMenu();
@@ -98,9 +99,9 @@ bool Model::Employee::updateEmployee() {
 				return false;
 			}
 			else if (rc == 0) {
-				std::cout << "\x1b[32mDepartment Updated successfully\x1b[0m \n\n";
+				std::cout << "\x1b[32mEmployee Updated successfully\x1b[0m \n\n";
 				waitMenu();
-				logging::Info("Department Updated with Id: ", std::to_string(getId()));
+				logging::Info("Employee Updated with Id: ", std::to_string(getId()));
 				return true;
 			}
 		}
@@ -117,74 +118,35 @@ bool Model::Employee::deleteEmployee() {
 	try {
 		system("cls");
 		std::string query1 = "delete from Employee where ";
-		std::string s;
-		int count1 = 0;
-		int count2 = 0;
-		int i;
-		std::cout << "Select the Field on which you want to perform delete Operation\n";
-		std::cout << "0. Go Back\n";
-		std::cout << "1. Eid\n";
-		std::cout << "2. email\n\n";
-
-		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-2]" }).value_or("0"));
-		std::cout << "\n";
-		std::string tmp;
-		while (1) {
-			switch (i) {
-			case 0:
-				return true;
-
-			case 1:
-				if (auto tmp = input("Enter Eid: ", idRegex); tmp.has_value()) setId(std::stoi(tmp.value()));
-				else {
-					std::cout << "\x1b[33m Deletion Failed!!! \x1b[0m\n";
+		auto tmp = deleteEmpViewer();
+		if (tmp.has_value()) {
+			Employee e = tmp.value();
+			query1 += "Eid = " + std::to_string(e.getId()) + ";";
+			int rc = DB::Database::getInstance().executeQuery(query1.c_str());
+			if (rc == 0) {
+				int change = sqlite3_changes(DB::Database::getInstance().db);
+				if (change == 0) {
+					std::cout << "\x1b[33mSelected Employee is not in database\x1b[0m\n";
 					waitMenu();
 					return false;
 				}
-				query1 += "Eid = " + std::to_string(getId()) + ";";
-				break;
-
-			case 2:
-				if (auto tmp = input("Enter Email: ", emailRegex); tmp.has_value()) setEmail(tmp.value());
 				else {
-					std::cout << "\x1b[33m Deletion Failed!!! \x1b[0m\n";
+					std::cout << "\x1b[32mEmployee Deleted successfully\x1b[0m\n\n";
 					waitMenu();
-					return false;
+					logging::Info("Employee deleted for Id: ", std::to_string(getId()));
+					return true;
 				}
-				query1 += "email = '" + getEmail() + "';";
-				break;
-
-			default:
-				std::cout << "Enter valid field to delete\n";
-				deleteEmployee();
-				break;
 			}
-			break;
-		}
-		//std::cout << query1 << "\n";
-
-		int rc = DB::Database::getInstance().executeQuery(query1.c_str());
-		if (rc == 0) {
-			int change = sqlite3_changes(DB::Database::getInstance().db);
-			if (change == 0) {
-				std::cout << "\x1b[33mSelected Employee is not in database\x1b[0m\n";
+			else if (rc == 19) {
+				std::cout << "\x1b[33mYou can not delete this Employee because this is a manager of other employees \x1b[0m\n\n";
 				waitMenu();
 				return false;
 			}
-			else {
-				std::cout << "\x1b[32mEmployee Deleted successfully\x1b[0m\n\n";
-				waitMenu();
-				logging::Info("Employee deleted for Id: ", std::to_string(getId()));
-				return true;
-			}
-		}
-		else if (rc == 19) {
-			std::cout << "\x1b[33mYou can not delete this Employee because this is a manager of other employees \x1b[0m\n\n";
-			waitMenu();
 			return false;
 		}
-		return false;
-
+		else {
+			return false;
+		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;

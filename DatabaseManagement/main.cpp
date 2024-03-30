@@ -9,13 +9,15 @@ void menu();
 
 int main() {
 	DB::Database::getInstance().open("Emp.db");
-	auto emp = userInputEmployee();
+	/*auto emp = userInputEmployee();
 	if (emp.has_value()) {
 		emp.value().insertEmployee();
-	}
+		waitMenu();
+	}*/
 	Model::Employee e1;
 	e1.viewEmployee();
 	e1.updateEmployee();
+	e1.deleteEmployee();
 	/*auto ch{ true };
 	Model::Table t;
 	while (ch) {
