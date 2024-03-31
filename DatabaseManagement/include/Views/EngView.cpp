@@ -1,8 +1,13 @@
-//#include "EmpView.h"
-//inline std::optional<Model::Employee> userInputEmployee() {
+//#pragma once
+//#include "EngView.h"
+//
+//std::optional<std::pair<string, string>> viewEmp();
+//std::optional<Model::Salary> userInputSalary();
+//
+//inline std::optional<Model::Engineer> userInputEngineer() {
 //	try {
 //		system("cls");
-//		Model::Employee e;
+//		Model::Engineer e;
 //		std::string msg = " Enter # to leave the field Empty: \n";
 //		if (auto tmp = input("Enter Eid: ", idRegex); tmp.has_value()) e.setId(std::stoi(tmp.value()));
 //		else return std::nullopt;
@@ -53,6 +58,12 @@
 //		if (auto tmp = userInputSalary(); tmp.has_value()) e.s = tmp.value();
 //		else return std::nullopt;
 //
+//		if (auto tmp = input("Enter Programming Language OR " + msg, allRegex); tmp.has_value()) e.setProgramming_language(tmp.value());
+//		else return std::nullopt;
+//
+//		if (auto tmp = input("Enter Specialization OR ", allRegex); tmp.has_value()) e.setSpecialization(tmp.value());
+//		else return std::nullopt;
+//
 //		return  e;
 //
 //	}
@@ -62,23 +73,30 @@
 //		return std::nullopt;
 //	}
 //}
-//inline std::optional<Model::Employee> updateEmpViewer() {
+//
+//inline std::optional<std::pair<std::string, std::string>> viewEng() {
+//	system("cls");
+//	return viewEmp();
+//}
+//
+//inline std::optional<Model::Engineer> updateEngViewer() {
 //	try {
 //		system("cls");
 //
-//		Model::Employee e;
+//		Model::Engineer e;
 //		e.setId(std::stoi(input("Enter the Eid to update Employee : ", idRegex).value()));
 //
-//		std::string select = "select * from Employee where id = " + std::to_string(e.getId()) + ";";
+//		std::string select = "select * from Engineer where id = " + std::to_string(e.getId()) + ";";
 //
 //		DB::Database::getInstance().selectQuery(select.c_str());
 //
 //		if (DB::Database::row == 0) {
-//			std::cout << "\x1b[33m Employee is not in database \x1b[0m\n";
+//			std::cout << "\x1b[33m Engineer is not in database \x1b[0m\n";
 //			waitMenu();
 //			return std::nullopt;
 //		}
-//		auto tmp = Model::Employee::getEmployee(std::to_string(e.getId()));
+//
+//		auto tmp = Model::Engineer::getEngineer(std::to_string(e.getId()));
 //
 //		if (tmp.has_value()) {
 //
@@ -86,6 +104,7 @@
 //			e = tmp.value();
 //			bool check = true;
 //			int i;
+//
 //			while (check) {
 //				std::cout << "Select the field you want to update \n";
 //				std::cout << "0. Go Back\n";
@@ -99,9 +118,11 @@
 //				std::cout << "8. doj\n";
 //				std::cout << "9. managerId\n";
 //				std::cout << "10. departmentId\n";
-//				std::cout << "11. toUpdateDatabase\n";
+//				std::cout << "11. programming language\n";
+//				std::cout << "12. specialization\n";
+//				std::cout << "13. toUpdateDatabase\n";
 //
-//				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-1]$" }).value_or("0"));
+//				i = std::stoi(input("Enter Your Choice : ", std::regex{ "^[0-9]$|^1[0-3]$" }).value_or("0"));
 //				switch (i) {
 //				case 0:
 //					return std::nullopt;
@@ -220,6 +241,24 @@
 //					break;
 //
 //				case 11:
+//					if (auto tmp = input("Enter Programming Language Id: ", allRegex); tmp.has_value()) e.setProgramming_language(tmp.value());
+//					else {
+//						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+//						waitMenu();
+//						return std::nullopt;
+//					}
+//					break;
+//
+//				case 12:
+//					if (auto tmp = input("Enter Specialization: ", allRegex); tmp.has_value()) e.setSpecialization(tmp.value());
+//					else {
+//						std::cout << "\x1b[33m Updation Failed!!! \x1b[0m\n";
+//						waitMenu();
+//						return std::nullopt;
+//					}
+//					break;
+//
+//				case 13:
 //					check = false;
 //					break;
 //				}
@@ -227,126 +266,11 @@
 //			return e;
 //		}
 //		else {
-//			std::cout << "\x1b[33m Employee is not in database!!! \x1b[0m\n";
+//			std::cout << "\x1b[33m Engineer is not in database!!! \x1b[0m\n";
 //			return std::nullopt;
 //		}
 //	}
 //	catch (std::exception& e) {
-//		return std::nullopt;
-//	}
-//}
-//inline std::optional<std::pair<string, string>> viewEmp() {
-//	try {
-//		system("cls");
-//		std::pair<std::string, std::string> p;
-//		std::cout << "Select the Field on which you want to view the Employee\n";
-//		std::cout << "0. Go Back\n";
-//		std::cout << "1. Eid\n";
-//		std::cout << "2. fname\n";
-//		std::cout << "3. email\n";
-//		std::cout << "4. department name\n";
-//		std::cout << "5. Manager Id\n";
-//		std::cout << "6. ALL\n\n";
-//		int i;
-//		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-6]" }).value_or("0"));
-//		while (1) {
-//			switch (i) {
-//			case 0:
-//				return std::nullopt;
-//				break;
-//			case 1:
-//				if (auto tmp = input("Enter Eid: ", idRegex); tmp.has_value()) {
-//					p = std::make_pair("Eid", tmp.value());
-//				}
-//				else {
-//					return std::nullopt;
-//				}
-//				break;
-//			case 2:
-//				if (auto tmp = input("Enter Fname: ", alphaRegex); tmp.has_value()) {
-//					p = std::make_pair("firstname", tmp.value());
-//				}
-//				else {
-//					return std::nullopt;
-//				}
-//				break;
-//			case 3:
-//				if (auto tmp = input("Enter Email: ", emailRegex); tmp.has_value()) {
-//					p = std::make_pair("email", tmp.value());
-//				}
-//				else {
-//					return std::nullopt;
-//				}
-//				break;
-//			case 4:
-//				if (auto tmp = input("Enter Dname: ", allRegex); tmp.has_value()) {
-//					p = std::make_pair("Dname", tmp.value());
-//				}
-//				else {
-//					return std::nullopt;
-//				}
-//				break;
-//			case 5:
-//				if (auto tmp = input("Enter Manager Id: ", idRegex); tmp.has_value()) {
-//					p = std::make_pair("manager_id", tmp.value());
-//				}
-//				else {
-//					return std::nullopt;
-//				}
-//				break;
-//			case 6:
-//				p = std::make_pair("all", "all");
-//				break;
-//
-//			default:
-//				std::cout << "Enter valid field\n";
-//				viewEmp();
-//				break;
-//			}
-//			break;
-//		}
-//		return p;
-//	}
-//	catch (std::exception& e) {
-//		std::cout << e.what() << std::endl;
-//		waitMenu();
-//		return std::nullopt;
-//	}
-//
-//}
-//inline std::optional<Model::Employee> deleteEmpViewer() {
-//	try {
-//		system("cls");
-//
-//		Model::Employee d;
-//		std::cout << "Select the Field on which you want to perform delete Operation\n";
-//		std::cout << "0. Go Back\n";
-//		std::cout << "1. Eid\n";
-//		int i;
-//		i = std::stoi(input("Enter Your Choice : ", std::regex{ "[0-1]" }).value_or("0"));
-//		std::cout << "\n";
-//		while (1) {
-//			switch (i) {
-//			case 0:
-//				return std::nullopt;
-//
-//			case 1:
-//				if (auto tmp = input("Enter Employee ID: ", idRegex); tmp.has_value()) d.setId(std::stoi(tmp.value()));
-//				else {
-//					;
-//					return std::nullopt;
-//				}
-//				break;
-//			default:
-//				std::cout << "Enter valid field to delete\n";
-//				deleteEmpViewer();
-//				break;
-//			}
-//			break;
-//		}
-//		return d;
-//	}
-//	catch (std::exception e) {
 //		return std::nullopt;
 //	}
 //}

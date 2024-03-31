@@ -4,18 +4,22 @@ int DB::Database::row = 0;
 
 bool DB::Database::open(const char* str) {
 	rc = sqlite3_open(str, &db);
+	const char* pragmaQuery = { "PRAGMA foreign_keys = ON;" };
+	executeQuery(pragmaQuery);
 
 	if (rc) {
 		logging::default_logger()->log(logging::Log::Level::LevelError, sqlite3_errmsg(db));
-		std::cerr << "Can't open database: " << sqlite3_errmsg(db) << "\n";
+		std::cerr << "\x1b[31mCan't open database: " << sqlite3_errmsg(db) << "\x1b[0m\n";
 		return false;
 	}
 	else {
 		logging::default_logger()->log(logging::Log::Level::LevelInfo, "Database Open Successfully");
 		//std::cout << "Database Open Successfully \n";
+		return true;
 	}
+}
 
-
+bool DB::Database::createDefaultTables() {
 	const char* sql = "CREATE TABLE IF NOT EXISTS Employee ("
 		"Eid INTEGER PRIMARY KEY,"
 		"firstname VARCHAR,"
@@ -37,7 +41,7 @@ bool DB::Database::open(const char* str) {
 	if (rc != SQLITE_OK)
 	{
 		logging::default_logger()->log(logging::Log::Level::LevelError, sqlite3_errmsg(db));
-		std::cerr << "SQL error: " << errorMsg << std::endl;
+		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
 		sqlite3_free(errorMsg);
 	}
 	else
@@ -58,7 +62,7 @@ bool DB::Database::open(const char* str) {
 	if (rc != SQLITE_OK)
 	{
 		logging::default_logger()->log(logging::Log::Level::LevelError, sqlite3_errmsg(db));
-		std::cerr << "SQL error: " << errorMsg << std::endl;
+		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
 		sqlite3_free(errorMsg);
 	}
 	else
@@ -79,7 +83,7 @@ bool DB::Database::open(const char* str) {
 	if (rc != SQLITE_OK)
 	{
 		logging::default_logger()->log(logging::Log::Level::LevelError, sqlite3_errmsg(db));
-		std::cerr << "SQL error: " << errorMsg << std::endl;
+		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
 		sqlite3_free(errorMsg);
 	}
 	else
@@ -99,7 +103,7 @@ bool DB::Database::open(const char* str) {
 	if (rc != SQLITE_OK)
 	{
 		logging::default_logger()->log(logging::Log::Level::LevelError, sqlite3_errmsg(db));
-		std::cerr << "SQL error: " << errorMsg << std::endl;
+		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
 		sqlite3_free(errorMsg);
 	}
 	else
@@ -120,7 +124,7 @@ bool DB::Database::open(const char* str) {
 	if (rc != SQLITE_OK)
 	{
 		logging::default_logger()->log(logging::Log::Level::LevelError, sqlite3_errmsg(db));
-		std::cerr << "SQL error: " << errorMsg << std::endl;
+		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
 		sqlite3_free(errorMsg);
 	}
 	else
@@ -128,9 +132,6 @@ bool DB::Database::open(const char* str) {
 		logging::default_logger()->log(logging::Log::Level::LevelInfo, "Table created successfully");
 		//std::cout << "Table created successfully" << std::endl;
 	}
-
-	const char* pragmaQuery = { "PRAGMA foreign_keys = ON;" };
-	executeQuery(pragmaQuery);
 
 	return true;
 }
@@ -147,7 +148,7 @@ int DB::Database::executeQuery(const char* sql, float count)
 	}
 	else if (rc != SQLITE_OK)
 	{
-		std::cerr << "SQL error: " << errorMsg << std::endl;
+		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
 		waitMenu();
 		sqlite3_free(errorMsg);
 		return rc;
@@ -170,7 +171,7 @@ bool DB::Database::selectQuery(const char* sql)
 
 	if (rc != SQLITE_OK)
 	{
-		std::cerr << "SQL error: " << errorMsg << std::endl;
+		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
 		std::cout << "Press Enter to continue\n";
 		std::cin.get();
 		sqlite3_free(errorMsg);
@@ -188,10 +189,11 @@ bool DB::Database::close() {
 	rc = sqlite3_close(db);
 
 	if (rc != SQLITE_OK) {
-		std::cerr << "Database Failed to close\n";
+		//std::cerr << "Database Failed to close\n";
 		return false;
 	}
 	else {
+		logging::Info("Database closed Successfully");
 		//std::cout << "Database closed Successfully\n";
 		return true;
 	}
@@ -214,7 +216,9 @@ int DB::Database::callback(void* data, int args, char** row, char** col) {
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		waitMenu();
+		return 0;
 	}
+	return 0;
 }
 
 int DB::Database::callbackOther(void* data, int argc, char** argv, char** azColName) {
@@ -222,4 +226,3 @@ int DB::Database::callbackOther(void* data, int argc, char** argv, char** azColN
 	*count = atoi(argv[0]);
 	return 0;
 }
-

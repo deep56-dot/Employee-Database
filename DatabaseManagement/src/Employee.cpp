@@ -1,6 +1,7 @@
 #include "../include/Model/Employee.h"
-std::optional<Model::Employee> updateEmpViewer();
-std::optional<Model::Employee> deleteEmpViewer();
+#include "../include/Views/EmpView.h"
+
+
 
 bool Model::Employee::viewEmployee() {
 	try {
@@ -40,6 +41,7 @@ bool Model::Employee::viewEmployee() {
 		waitMenu();
 		return false;
 	}
+
 }
 
 bool Model::Employee::insertEmployee() {
@@ -81,44 +83,45 @@ bool Model::Employee::insertEmployee() {
 
 bool Model::Employee::updateEmployee() {
 	try {
-		auto tmp = updateEmpViewer();
-		//auto tmp = Model::Employee::getEmployee(std::to_string(id));  // For testing
-		if (tmp.has_value()) {
 
-			*this = tmp.value();
+		// Uncooment for testing
+		/*std::string select = "select * from Employee where Eid = " + std::to_string(Eid) + ";";
 
-			std::string query = " UPDATE Employee SET  firstname = '" + firstname + "', lastname = '" + lastname + "', dob = '" + dob + "', mobile = '" + mobile + "', email = '" + email + "', address = '" + address + "', gender = ";
-			if (gender == Gender::Male) {
-				query += "Male";
-			}
-			else if (gender == Gender::Female) {
-				query += "Female";
-			}
-			else {
-				query += "Other";
-			}
+		DB::Database::getInstance().selectQuery(select.c_str());
+		if (DB::Database::row == 0) {
+			std::cout << "\x1b[33m Employee is not in database \x1b[0m\n";
+			waitMenu();
+			return false;
+		}*/
 
-			query += ", doj = '" + doj + "' , manager_id = " + std::to_string(manager_id) + " , department_id = " + std::to_string(department_id) + " WHERE Eid = " + std::to_string(Eid) + ";";
-			
-			int rc = DB::Database::getInstance().executeQuery(query.c_str());
-
-			if (rc == 19) {
-				std::cerr << "\x1b[33m You can not assigne value because entered manager or department is not in database OR entered employee is already in database \x1b[0m\n\n";
-				waitMenu();
-				return false;
-			}
-			else if (rc == 0) {
-				std::cout << "\x1b[32m Employee Updated successfully\x1b[0m \n\n";
-				waitMenu();
-				logging::Info("Employee Updated with Id: ", std::to_string(getId()));
-				return true;
-			}
+		std::string query = " UPDATE Employee SET  firstname = '" + firstname + "', lastname = '" + lastname + "', dob = '" + dob + "', mobile = '" + mobile + "', email = '" + email + "', address = '" + address + "', gender = ";
+		if (gender == Gender::Male) {
+			query += "'Male'";
+		}
+		else if (gender == Gender::Female) {
+			query += "'Female'";
 		}
 		else {
-			std::cerr << "\x1b[33m Updation Failed \x1b[0m\n\n";
+			query += "'Other'";
+		}
+
+		query += ", doj = '" + doj + "' , manager_id = " + std::to_string(manager_id) + " , department_id = " + std::to_string(department_id) + " WHERE Eid = " + std::to_string(Eid) + ";";
+		//std::cout << query << "\n";
+		//waitMenu(); 
+		int rc = DB::Database::getInstance().executeQuery(query.c_str());
+
+		if (rc == 19) {
+			std::cerr << "\x1b[33m You can not assigne value because entered manager or department is not in database OR entered employee is already in database \x1b[0m\n\n";
 			waitMenu();
 			return false;
 		}
+		else if (rc == 0) {
+			std::cout << "\x1b[32m Employee Updated successfully\x1b[0m \n\n";
+			waitMenu();
+			logging::Info("Employee Updated with Id: ", std::to_string(getId()));
+			return true;
+		}
+
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
@@ -126,41 +129,35 @@ bool Model::Employee::updateEmployee() {
 		waitMenu();
 		return false;
 	}
+
 }
 
 bool Model::Employee::deleteEmployee() {
 	try {
-		system("cls");
-		std::string query1 = "delete from Employee where ";
-		auto tmp = deleteEmpViewer();
-		if (tmp.has_value()) {
-			Employee e = tmp.value();
-			query1 += "Eid = " + std::to_string(e.getId()) + ";";
-			int rc = DB::Database::getInstance().executeQuery(query1.c_str());
-			if (rc == 0) {
-				int change = sqlite3_changes(DB::Database::getInstance().db);
-				if (change == 0) {
-					std::cout << "\x1b[33mSelected Employee is not in database\x1b[0m\n";
-					waitMenu();
-					return false;
-				}
-				else {
-					std::cout << "\x1b[32mEmployee Deleted successfully\x1b[0m\n\n";
-					waitMenu();
-					logging::Info("Employee deleted for Id: ", std::to_string(getId()));
-					return true;
-				}
-			}
-			else if (rc == 19) {
-				std::cout << "\x1b[33mYou can not delete this Employee because this is a manager of other employees \x1b[0m\n\n";
+		std::string query = "delete from Employee where Eid = " + std::to_string(Eid) + ";";
+
+		int rc = DB::Database::getInstance().executeQuery(query.c_str());
+
+		if (rc == 0) {
+			int change = sqlite3_changes(DB::Database::getInstance().db);
+			if (change == 0) {
+				std::cout << "\x1b[33m Selected Employee is not in database\x1b[0m\n";
 				waitMenu();
 				return false;
 			}
+			else {
+				std::cout << "\x1b[32m Employee Deleted successfully\x1b[0m \n\n";
+				waitMenu();
+				logging::Info("Employee Deleted with Id: ", std::to_string(getId()));
+				return true;
+			}
+		}
+		else if (rc == 19) {
+			std::cout << "\x1b[33m You can not Delete this Employee because there is employee which are managed by in this Employee \x1b[0m \n\n";
+			waitMenu();
 			return false;
 		}
-		else {
-			return false;
-		}
+
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
@@ -168,13 +165,10 @@ bool Model::Employee::deleteEmployee() {
 		waitMenu();
 		return false;
 	}
-	return false;
 }
 
-void Model::Employee::action() noexcept {
-
-}
 std::optional<Model::Employee> Model::Employee::getEmployee(const std::string& id) {
+
 	Employee e;
 	auto callback = [](void* data, int argc, char** argv, char** azColName) {
 		Employee* d1 = static_cast<Employee*>(data);
@@ -207,64 +201,3 @@ std::optional<Model::Employee> Model::Employee::getEmployee(const std::string& i
 	//std::cout << e.getId(); 
 	return e;
 }
-
-//bool Model::Employee::userInputEmployee() {
-//	/*try {
-//
-//		std::string msg = " Enter # to leave the field Empty: \n";
-//
-//		if (auto tmp = input("Enter Eid: ", idRegex); tmp.has_value()) setId(std::stoi(tmp.value()));
-//		else return false;
-//
-//		if (auto tmp = input("Enter FirstName OR " + msg, alphaRegex); tmp.has_value()) setFirstname(tmp.value());
-//		else return false;
-//
-//		if (auto tmp = input("Enter LastName OR " + msg, alphaRegex); tmp.has_value()) setLastname(tmp.value());
-//		else return false;
-//
-//		if (auto tmp = input("Enter DOB (dd-mm-yyyy) OR " + msg, dateRegex); tmp.has_value()) setDob(tmp.value());
-//		else return false;
-//
-//		if (auto tmp = input("Enter Mobile OR " + msg, mobileRegex); tmp.has_value()) setMobile(tmp.value());
-//		else return false;
-//
-//		if (auto tmp = input("Enter Email OR " + msg, emailRegex); tmp.has_value()) setEmail(tmp.value());
-//		else return false;
-//
-//		if (auto tmp = input("Enter Email OR " + msg, allRegex); tmp.has_value()) setAddress(tmp.value());
-//		else return false;
-//
-//		auto gender = input("Enter Gender(Male / Female / Other): ", genderRegex);
-//		if (gender.has_value()) {
-//			if (gender.value() == "Male") {
-//				setGender(Gender::Male);
-//			}
-//			else if (gender.value() == "Female") {
-//				setGender(Gender::Female);
-//			}
-//			else {
-//				setGender(Gender::Other);
-//			}
-//		}
-//		else {
-//			return false;
-//		}
-//
-//		if (auto tmp = input("Enter DOJ(dd-mm-yyyy) OR " + msg, dateRegex); tmp.has_value()) setDoj(tmp.value());
-//		else return false;
-//
-//		if (auto tmp = input("Enter Manager Id: ", idRegex); tmp.has_value()) setManagerId(stoi(tmp.value()));
-//		else return false;
-//
-//		if (auto tmp = input("Enter Department Id: ", idRegex); tmp.has_value()) setDepartmentId(stoi(tmp.value()));
-//		else return false;
-//
-//		return s.userInputSalary();
-//
-//	}
-//	catch (std::exception& e) {
-//		std::cout << e.what() << std::endl;
-//		waitMenu();
-//		return false;
-//	}*/
-//}

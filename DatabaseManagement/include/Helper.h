@@ -11,11 +11,12 @@ namespace utility {
 
 	inline std::optional<std::string> input(const std::string prompt, const std::regex& r, bool flag = false) {
 		std::string input;
+
 		auto cnt{ 0 };
+
 		while (true) {
-			if (cnt == 3) {
-				break;
-			}
+
+			if (cnt == 3) break;
 			std::cout << prompt;
 			std::getline(std::cin, input);
 
@@ -33,7 +34,7 @@ namespace utility {
 	}
 
 	inline  std::string fun() {
-		return "DEEP";
+		return "darshan";
 	}
 
 	inline void waitMenu() {

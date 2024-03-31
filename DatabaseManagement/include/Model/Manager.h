@@ -29,8 +29,7 @@ namespace Model {
         bool insertManager();
         bool deleteManager();
         bool updateManager();
-        bool userInputManager();
-        void action() noexcept;
+        static std::optional<Model::Manager> getManager(const std::string&);
 
     private:
 

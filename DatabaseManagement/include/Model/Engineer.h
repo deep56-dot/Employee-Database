@@ -1,6 +1,8 @@
 #ifndef _Engineer_
 #define _Engineer_
 
+#include <optional>
+#include <utility>
 #include "Employee.h"
 #include "../LOG/log.h"
 #include "../LOG/logger.h"
@@ -27,8 +29,7 @@ namespace Model {
         bool insertEngineer();
         bool deleteEngineer();
         bool updateEngineer();
-        bool userInputEngineer();
-        void action() noexcept;
+        static std::optional<Engineer> getEngineer(const std::string&);
 
     private:
         std::string programming_language;

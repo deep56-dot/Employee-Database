@@ -2,24 +2,27 @@
 #include "sqlite/sqlite3.h"
 #include "include/DBmanage.h"
 #include "include/Helper.h"
+#include "include/LOG/log.h"
+#include "include/LOG/logger.h"
 #include "include/Model/Table.h"
-#include "include/Views/EmpView.h"
+
+using namespace utility;
 
 void menu();
+void tableAction();
 
 int main() {
-	DB::Database::getInstance().open("Emp.db");
-	/*auto emp = userInputEmployee();
-	if (emp.has_value()) {
-		emp.value().insertEmployee();
-		waitMenu();
+	logging::default_logger()->setFileDump(true);
+	DB::Database::getInstance().open("employee.db");
+
+	auto tables = Model::Table::getAllTables();
+	if (tables.size() == 0) {
+		DB::Database::getInstance().createDefaultTables();
 	}
-	Model::Employee e1;
-	e1.viewEmployee();
-	e1.updateEmployee();
-	e1.deleteEmployee();*/
+
 	auto ch{ true };
 	Model::Table t;
+
 	while (ch) {
 		system("cls");
 		std::cout << "------------------------------------> WELCOME TO EMPLOYEE MANAGEMENT SYSTEM <-------------------------------------------\n";
@@ -52,7 +55,7 @@ int main() {
 			break;
 
 		case 5:
-			t.action();
+			tableAction();
 			break;
 
 		case 6:
@@ -67,6 +70,4 @@ int main() {
 			std::cout << "Enter valid input: \n";
 		}
 	}
-
-	
 }

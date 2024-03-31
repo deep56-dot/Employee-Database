@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+#include <utility>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -15,47 +16,43 @@
 using namespace utility;
 
 namespace Model {
-    class Department {
-    public:
-        Department() = default;
-        Department(int id, const std::string_view& name, int manager_id, const std::string_view& description)
-            : Did(id), Dname(name), manager_id(manager_id), description(description) {}
+	class Department {
+	public:
+		Department() = default;
+		Department(int id, const std::string_view& name, int manager_id, const std::string_view& description)
+			: Did(id), Dname(name), manager_id(manager_id), description(description) {}
 
-        int getId() const { return Did; }
-        std::string getName() const { return Dname; }
-        int getManagerId() const { return manager_id; }
-        std::string getDescription() const { return description; }
+		int getId() const { return Did; }
+		std::string getName() const { return Dname; }
+		int getManagerId() const { return manager_id; }
+		std::string getDescription() const { return description; }
 
-        void setId(const int& id1) {
-            Did = id1;
-        }
+		void setId(const int& id1) {
+			Did = id1;
+		}
+		void setName(const std::string_view& name) {
+			Dname = name;
+		}
+		void setManagerId(const int& mId) {
+			manager_id = mId;
+		}
+		void setDescription(const std::string_view& desc) {
+			description = desc;
+		}
 
-        void setName(const std::string_view& name) {
-            Dname = name;
-        }
+		static std::optional<Department> getDepartment(const std::string& id);
+		bool viewDepartment();
+		bool insertDepartment();
+		bool deleteDepartment();
+		bool updateDepartment();
 
-        void setManagerId(const int& mId) {
-            manager_id = mId;
-        }
+	private:
 
-        void setDescription(const std::string_view& desc) {
-            description = desc;
-        }
+		int Did{};
+		std::string Dname{};
+		int manager_id{};
+		std::string description{};
+	};
 
-        bool viewDepartment();
-        bool insertDepartment();
-        bool deleteDepartment();
-        bool updateDepartment();
-        bool userInputDepartment();
-        void action() noexcept;
-
-    private:
-
-        int Did{};
-        std::string Dname{};
-        int manager_id{};
-        std::string description{};
-    };
 }
-
 #endif
