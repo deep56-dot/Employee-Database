@@ -34,3 +34,15 @@ id,Dname,manager_id,description;
 id,Dname,manager_id,description;
 1,c++,2,Dc;
 3,dc,1,;
+
+01-04-2024 09:52:21
+
+id,Dname,manager_id,description;
+
+01-04-2024 15:46:16
+
+id,Dname,manager_id,description;
+1,DC,501,unrealengine 5 for desktop application;
+2,QA,501,testing;
+3,testing ,501,Team for Teasting;
+4,Finance ,501,jhk jhh;

@@ -147,12 +147,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\Views\EmpView.cpp" />
-    <ClCompile Include="include\Views\SalaryView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite\shell.c" />
     <ClCompile Include="sqlite\sqlite3.c" />
     <ClCompile Include="src\action.cpp" />
+    <ClCompile Include="src\controllers\departmentController.cpp" />
+    <ClCompile Include="src\controllers\employeeController.cpp" />
+    <ClCompile Include="src\controllers\engineerController.cpp" />
+    <ClCompile Include="src\controllers\managerController.cpp" />
+    <ClCompile Include="src\controllers\salaryController.cpp" />
     <ClCompile Include="src\DBmanage.cpp" />
     <ClCompile Include="src\Department.cpp" />
     <ClCompile Include="src\Employee.cpp" />
@@ -174,8 +177,11 @@
     <ClInclude Include="include\Model\Salary.h" />
     <ClInclude Include="include\Model\Table.h" />
     <ClInclude Include="include\Regex.h" />
-    <ClInclude Include="include\Views\EmpView.h" />
-    <ClInclude Include="include\Views\SalaryView.h" />
+    <ClInclude Include="include\controllers\departmentController.h" />
+    <ClInclude Include="include\controllers\employeeController.h" />
+    <ClInclude Include="include\controllers\engineerController.h" />
+    <ClInclude Include="include\controllers\managerController.h" />
+    <ClInclude Include="include\controllers\salaryController.h" />
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
   </ItemGroup>

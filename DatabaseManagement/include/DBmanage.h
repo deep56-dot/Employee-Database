@@ -4,8 +4,6 @@
 #include<iostream>
 #include <iomanip>
 #include <vector>
-#include <filesystem>
-#include <fstream>
 #include <string>
 #include "../include/Helper.h"
 #include "../sqlite/sqlite3.h"
@@ -19,7 +17,6 @@ namespace DB {
 
 		Database() = default;
 		~Database() {
-			//sqlite3_close(db);
 			close();
 		}
 		Database(const Database&) = delete;
@@ -30,18 +27,24 @@ namespace DB {
 		sqlite3* db{};
 		int rc{ 0 };
 		sqlite3_stmt* stmt{};
+
 		static int row;
+
 		bool open(const char* str);
+		bool createDefaultTables();
 		bool close();
 		int executeQuery(const char* sql, float count = 0);
 		bool selectQuery(const char* sql);
+		bool selectQueryForChecking(const char* sql);
+
 		static Database& getInstance() {
 			static Database db;
 			return db;
 		}
-		
+
+
 		static int callback(void* data, int args, char** row, char** col);
-		static int callbackOther(void* data, int args, char** row, char** col);
+		static int callbackForChecking(void* data, int args, char** row, char** col);
 	};
 }
 

@@ -36,7 +36,6 @@ namespace Model {
 		bool viewRecord() const;
 		bool viewAllRecords() const;
 
-		void action() noexcept;
 
 
 		std::string getname() noexcept {

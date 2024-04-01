@@ -1,6 +1,8 @@
 #ifndef _Engineer_
 #define _Engineer_
 
+#include <optional>
+#include <utility>
 #include "Employee.h"
 #include "../LOG/log.h"
 #include "../LOG/logger.h"
@@ -23,12 +25,11 @@ namespace Model {
         void setProgramming_language(const std::string_view& lang) { programming_language = lang; }
         void setSpecialization(const std::string_view& specs) { specialization = specs; }
 
-        bool viewEngineer();
-        bool insertEngineer();
-        bool deleteEngineer();
-        bool updateEngineer();
-        bool userInputEngineer();
-        void action() noexcept;
+        bool viewEngineer() const;
+        bool insertEngineer() const;
+        bool deleteEngineer() const;
+        bool updateEngineer() const;
+        static std::optional<Engineer> getEngineer(const std::string&);
 
     private:
         std::string programming_language;

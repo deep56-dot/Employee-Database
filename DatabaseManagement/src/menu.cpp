@@ -2,10 +2,10 @@
 #include "../include/Helper.h"
 
 void action(int j);
+void salaryAction();
 
 void menu() noexcept {
 	auto flag{ true };
-	Model::Salary s;
 	while (flag) {
 		system("cls");
 		std::cout << "Select The Table You want to interact \n";
@@ -24,7 +24,7 @@ void menu() noexcept {
 			break;
 
 		case 4:
-			s.action();
+			salaryAction();
 			break;
 
 		case 5:

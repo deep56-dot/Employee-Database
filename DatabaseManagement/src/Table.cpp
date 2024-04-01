@@ -241,7 +241,8 @@ std::vector<Model::Table> Model::Table::getAllTables() {
 }
 
 void Model::Table::writeCSV() {
-	std::filesystem::path p{ "C:\\Users\\dell\\OneDrive - ZURU INC\\C++ Training\\DatabaseManagement\\DatabaseManagement\\Backup" };
+
+	std::filesystem::path p{ "BackUp\\" };
 
 	auto tables = getAllTables();
 	for (auto& table : tables) {
@@ -579,66 +580,5 @@ bool Model::Table::viewAllRecords()const {
 		std::cout << e.what() << std::endl;
 		waitMenu();
 		return false;
-	}
-}
-
-void Model::Table::action() noexcept {
-	auto tables = getAllTables();
-	system("cls");
-	for (auto& table : tables) {
-		std::cout << "-> " << table.getname() << "\n";
-	}
-
-	std::string tableName = input("Enter the name of the table you want to access from above tables: ", alphaRegex).value();
-	auto t = getTable(tableName);
-	if (t.has_value()) {
-		auto ch{ true };
-		while (ch) {
-			system("cls");
-			std::cout << "Enter the opearation you want to perform: \n";
-			std::cout << "1. View Record\n";
-			std::cout << "2. View All Record\n";
-			std::cout << "3. Insert Record\n";
-			std::cout << "4. Update Record\n";
-			std::cout << "5. Delete Record\n";
-			std::cout << "6. Show Schema\n";
-			std::cout << "7. Go Back\n";
-
-			int i = std::stoi(input("Enter Choice: ", std::regex{ "^[1-7]$" }).value_or("7"));
-			switch (i) {
-			case 1:
-				t.value().viewRecord();
-				break;
-
-			case 2:
-				t.value().viewAllRecords();
-				break;
-
-			case 3:
-				t.value().insertRecord();
-				break;
-
-			case 4:
-				t.value().updateRecord();
-				break;
-
-			case 5:
-				t.value().deleteRecord();
-				break;
-
-			case 6:
-				t.value().infoTable();
-				break;
-
-			case 7:
-				ch = false;
-				break;
-			}
-		}
-	}
-	else {
-		system("cls");
-		std::cout << "\x1b[33mEntered table is not exist in database\x1b[0m\n";
-		waitMenu();
 	}
 }

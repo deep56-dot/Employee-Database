@@ -2,8 +2,6 @@
 #define _Salary_
 #include <iostream> 
 #include <map> 
-#include <string> 
-#include <optional> 
 #include "../Helper.h"
 #include "../Regex.h"
 #include "../DBmanage.h"
@@ -32,14 +30,12 @@ namespace Model {
         void setBaseSalary(const double& bSalary) { base_salary = bSalary; }
         void setBonus(const double& figure) { bonus = figure; }
 
-        bool viewSalary();
-        //bool userInputSalary();
+        bool viewSalary() const;
         bool insertSalary(int id) const;
         double increment(double, int);
-        bool deleteSalary();
-        bool updateSalary();
-        void action() noexcept;
-        static std::optional<Model::Salary> getSalary(const std::string& id);
+        bool deleteSalary() const;
+        bool updateSalary() const;
+        static std::optional<Model::Salary> getSalary(const std::string&);
 
     private:
 
