@@ -1,5 +1,11 @@
 #include "../include/Model/Employee.h"
+<<<<<<< HEAD
 #include "../include/controllers/employeeController.h"
+=======
+#include "../include/Views/EmpView.h"
+
+
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 bool Model::Employee::viewEmployee() const {
 	try {
@@ -82,6 +88,7 @@ bool Model::Employee::insertEmployee() const {
 bool Model::Employee::updateEmployee() const {
 	try {
 
+<<<<<<< HEAD
 		//  for testing
 		std::string select = "select * from Employee where Eid = " + std::to_string(Eid) + ";";
 
@@ -115,11 +122,50 @@ bool Model::Employee::updateEmployee() const {
 		}
 		else if (rc == 0) {
 			//std::cout << "\x1b[32m Employee Updated successfully\x1b[0m \n\n";
+=======
+		// Uncooment for testing
+		/*std::string select = "select * from Employee where Eid = " + std::to_string(Eid) + ";";
+
+		DB::Database::getInstance().selectQuery(select.c_str());
+		if (DB::Database::row == 0) {
+			std::cout << "\x1b[33m Employee is not in database \x1b[0m\n";
+			waitMenu();
+			return false;
+		}*/
+
+		std::string query = " UPDATE Employee SET  firstname = '" + firstname + "', lastname = '" + lastname + "', dob = '" + dob + "', mobile = '" + mobile + "', email = '" + email + "', address = '" + address + "', gender = ";
+		if (gender == Gender::Male) {
+			query += "'Male'";
+		}
+		else if (gender == Gender::Female) {
+			query += "'Female'";
+		}
+		else {
+			query += "'Other'";
+		}
+
+		query += ", doj = '" + doj + "' , manager_id = " + std::to_string(manager_id) + " , department_id = " + std::to_string(department_id) + " WHERE Eid = " + std::to_string(Eid) + ";";
+		//std::cout << query << "\n";
+		//waitMenu(); 
+		int rc = DB::Database::getInstance().executeQuery(query.c_str());
+
+		if (rc == 19) {
+			std::cerr << "\x1b[33m You can not assigne value because entered manager or department is not in database OR entered employee is already in database \x1b[0m\n\n";
+			waitMenu();
+			return false;
+		}
+		else if (rc == 0) {
+			std::cout << "\x1b[32m Employee Updated successfully\x1b[0m \n\n";
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 			waitMenu();
 			logging::Info("Employee Updated with Id: ", std::to_string(getId()));
 			return true;
 		}
+<<<<<<< HEAD
 		return false;
+=======
+
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
@@ -144,7 +190,11 @@ bool Model::Employee::deleteEmployee() const {
 				return false;
 			}
 			else {
+<<<<<<< HEAD
 				//std::cout << "\x1b[32m Employee Deleted successfully\x1b[0m \n\n";
+=======
+				std::cout << "\x1b[32m Employee Deleted successfully\x1b[0m \n\n";
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 				waitMenu();
 				logging::Info("Employee Deleted with Id: ", std::to_string(getId()));
 				return true;
@@ -155,7 +205,11 @@ bool Model::Employee::deleteEmployee() const {
 			waitMenu();
 			return false;
 		}
+<<<<<<< HEAD
 		return false;
+=======
+
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;

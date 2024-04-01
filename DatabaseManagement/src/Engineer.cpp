@@ -1,12 +1,23 @@
 #include "../include/Model/Engineer.h"
+<<<<<<< HEAD
 #include "../include/controllers/engineerController.h"
 
 bool Model::Engineer::viewEngineer() const {
+=======
+#include "../include/Views/EngView.h"
+
+
+bool Model::Engineer::viewEngineer() {
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 	try {
 		system("cls");
 		std::string query;
 
+<<<<<<< HEAD
 		auto tmp = viewEngineerController();
+=======
+		auto tmp = viewEng();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 		if (tmp.has_value()) {
 			auto& [field, value] = tmp.value();

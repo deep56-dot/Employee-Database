@@ -1,12 +1,24 @@
 #include "../include/Model/Department.h"
+<<<<<<< HEAD
 #include "../include/controllers/departmentController.h"
 
 bool Model::Department::viewDepartment() const {
+=======
+#include "../include/Views/DeptView.h"
+
+
+inline std::optional<std::pair<std::string, std::string>> viewDept();
+bool Model::Department::viewDepartment() {
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 	try {
 		system("cls");
 
 		std::string query;
+<<<<<<< HEAD
 		auto tmp = viewDepartmentController();
+=======
+		auto tmp = viewDept();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 		if (tmp.has_value()) {
 			auto& [field, value] = tmp.value();
@@ -19,6 +31,7 @@ bool Model::Department::viewDepartment() const {
 			}
 			else {
 				query += "select * from Department where " + field + " = '" + value + "' ;";
+<<<<<<< HEAD
 			}
 
 			DB::Database::getInstance().selectQuery(query.c_str());
@@ -41,6 +54,30 @@ bool Model::Department::viewDepartment() const {
 }
 
 bool Model::Department::insertDepartment() const {
+=======
+			}
+
+			DB::Database::getInstance().selectQuery(query.c_str());
+			if (DB::Database::row == 0) {
+				return false;
+			}
+			waitMenu();
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
+		waitMenu();
+		return false;
+	}
+}
+
+bool Model::Department::insertDepartment() {
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 	try {
 		//system("cls");
 
@@ -73,6 +110,7 @@ bool Model::Department::updateDepartment() const {
 
 	try {
 
+<<<<<<< HEAD
 		//  for testing 
 		std::string select = "select * from Department where id = " + std::to_string(getId()) + ";";
 
@@ -100,6 +138,35 @@ bool Model::Department::updateDepartment() const {
 			return true;
 		}
 		return false;
+=======
+		// Uncomment for testing
+		/*std::string select = "select * from Department where id = " + std::to_string(getId()) + ";";
+
+		DB::Database::getInstance().selectQuery(select.c_str());
+
+		if (DB::Database::row == 0) {
+			std::cout << "\x1b[33m Department is not in database \x1b[0m\n";
+			waitMenu();
+			return false;
+		}*/
+		std::string query = "update Department set Dname = '" + Dname + "', manager_id = " + std::to_string(manager_id) + ", description =  '" + description + "' where id = " + std::to_string(Did) + "; ";
+		//std::cout << query << "\n";
+		//waitMenu();
+		int rc = DB::Database::getInstance().executeQuery(query.c_str());
+
+		if (rc == 19) {
+			std::cerr << "\x1b[33m You can not assigne value because entered manager is not in database \x1b[0m\n\n";
+			waitMenu();
+			return false;
+		}
+		else if (rc == 0) {
+			std::cout << "\x1b[32mDepartment Updated successfully\x1b[0m \n\n";
+			waitMenu();
+			logging::Info("Department Updated with Id: ", std::to_string(getId()));
+			return true;
+		}
+
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
@@ -109,7 +176,11 @@ bool Model::Department::updateDepartment() const {
 	}
 }
 
+<<<<<<< HEAD
 bool Model::Department::deleteDepartment() const {
+=======
+bool Model::Department::deleteDepartment() {
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 	try {
 		std::string query = "delete from Department where id = " + std::to_string(Did) + ";";
 
@@ -133,7 +204,7 @@ bool Model::Department::deleteDepartment() const {
 			waitMenu();
 			return false;
 		}
-		return false;
+
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;

@@ -1,13 +1,24 @@
 #include "../include/Model/Manager.h"
+<<<<<<< HEAD
 #include "../include/controllers/managerController.h"
 
 bool Model::Manager::viewManager() const {
+=======
+#include "../include/Views/MangView.h"
+
+
+bool Model::Manager::viewManager() {
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 	try {
 		system("cls");
 		std::string query;
 
+<<<<<<< HEAD
 		auto tmp = viewManagerController();
+=======
+		auto tmp = viewMang();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 		if (tmp.has_value()) {
 			auto& [field, value] = tmp.value();
@@ -77,7 +88,11 @@ bool Model::Manager::insertManager() const {
 	return false;
 }
 
+<<<<<<< HEAD
 bool Model::Manager::updateManager() const {
+=======
+bool Model::Manager::updateManager() {
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 	try {
 		if (auto ch = updateEmployee(); ch) {
 

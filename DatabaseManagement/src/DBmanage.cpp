@@ -172,6 +172,7 @@ bool DB::Database::selectQuery(const char* sql)
 	if (rc != SQLITE_OK)
 	{
 		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
+<<<<<<< HEAD
 		std::cout << "Press Enter to continue\n";
 		std::cin.get();
 		sqlite3_free(errorMsg);
@@ -192,6 +193,8 @@ bool DB::Database::selectQueryForChecking(const char* sql)
 	if (rc != SQLITE_OK)
 	{
 		std::cerr << "\x1b[31mSQL error: " << errorMsg << "\x1b[0m" << std::endl;
+=======
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 		std::cout << "Press Enter to continue\n";
 		std::cin.get();
 		sqlite3_free(errorMsg);
@@ -238,6 +241,7 @@ int DB::Database::callback(void* data, int args, char** row, char** col) {
 		waitMenu();
 		return 0;
 	}
+<<<<<<< HEAD
 	return 0;
 }
 
@@ -245,3 +249,13 @@ int DB::Database::callbackForChecking(void* data, int argc, char** argv, char** 
 	Database::row++;
 	return 0;
 }
+=======
+	return 0;
+}
+
+int DB::Database::callbackOther(void* data, int argc, char** argv, char** azColName) {
+	int* count = reinterpret_cast<int*>(data);
+	*count = atoi(argv[0]);
+	return 0;
+}
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942

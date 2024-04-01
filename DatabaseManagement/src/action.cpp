@@ -2,11 +2,22 @@
 #include "../include/Model/Engineer.h" 
 #include "../include/Model/Manager.h"
 #include "../include/Model/Table.h"
+<<<<<<< HEAD
 #include "../include/controllers/departmentController.h"
 #include "../include/controllers/engineerController.h"
 #include "../include/controllers/managerController.h"
 #include "../include/controllers/salaryController.h"
 
+=======
+#include "../include/Views/EmpView.h"
+#include "../include/Views/EngView.h"
+#include "../include/Views/MangView.h"
+#include "../include/Views/DeptView.h"
+#include "../include/Views/SalaryView.h"
+
+
+
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 #include<optional>
 using namespace std;
 
@@ -32,7 +43,11 @@ void salaryAction() {
 
 		case 2:
 		{
+<<<<<<< HEAD
 			auto s1 = updateSalaryController();
+=======
+			auto s1 = updateSalaryViewer();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 			if (s1.has_value())
 				s1.value().updateSalary();
 			else {
@@ -153,7 +168,11 @@ void action(int j) noexcept {
 
 			case 3:
 			{
+<<<<<<< HEAD
 				auto e1 = updateEngineerController();
+=======
+				auto e1 = updateEngViewer();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 				if (e1.has_value()) {
 					e1.value().updateEngineer();
 				}
@@ -166,7 +185,11 @@ void action(int j) noexcept {
 
 			case 4:
 			{
+<<<<<<< HEAD
 				auto e1 = deleteEmployeeController();
+=======
+				auto e1 = deleteEmpViewer();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 				if (e1.has_value()) {
 					e1.value().deleteEmployee();
 				}
@@ -204,7 +227,11 @@ void action(int j) noexcept {
 
 			case 3:
 			{
+<<<<<<< HEAD
 				auto e1 = updateManagerController();
+=======
+				auto e1 = updateMangViewer();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 				if (e1.has_value()) {
 					e1.value().updateManager();
 				}
@@ -217,7 +244,11 @@ void action(int j) noexcept {
 
 			case 4:
 			{
+<<<<<<< HEAD
 				auto e1 = deleteEmployeeController();
+=======
+				auto e1 = deleteEmpViewer();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 				if (e1.has_value()) {
 					e1.value().deleteEmployee();
 				}
@@ -254,7 +285,11 @@ void action(int j) noexcept {
 
 			case 3:
 			{
+<<<<<<< HEAD
 				auto d1 = updateDepartmentController();
+=======
+				auto d1 = updateDeptViewer();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 				if (d1.has_value())
 					d1.value().updateDepartment();
 				else {
@@ -266,7 +301,11 @@ void action(int j) noexcept {
 
 			case 4:
 			{
+<<<<<<< HEAD
 				auto d1 = deleteDepartmentController();
+=======
+				auto d1 = deleteDeptViewer();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 				if (d1.has_value())
 					d1.value().deleteDepartment();
 				else {

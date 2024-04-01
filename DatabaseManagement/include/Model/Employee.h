@@ -55,12 +55,21 @@ namespace Model {
         void setDoj(const std::string_view& str) { doj = str; }
         void setManagerId(const int& id) { manager_id = id; }
         void setDepartmentId(const int& id) { department_id = id; }
+<<<<<<< HEAD
 
 
         bool viewEmployee() const;
         bool insertEmployee() const;
         bool deleteEmployee() const;
         bool updateEmployee() const;
+=======
+
+
+        bool viewEmployee();
+        bool insertEmployee();
+        bool deleteEmployee();
+        bool updateEmployee();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
         static std::optional<Employee> getEmployee(const std::string&);
 
         Model::Salary s{};

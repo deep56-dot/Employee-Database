@@ -41,6 +41,7 @@ Sid,amount,base_salary,bonus;
 2,1000000,800000,200000;
 3,600000,500000,100000;
 
+<<<<<<< HEAD
 01-04-2024 09:52:21
 
 Sid,amount,base_salary,bonus;
@@ -50,3 +51,8 @@ Sid,amount,base_salary,bonus;
 Sid,amount,base_salary,bonus;
 301,705000,605000,100000;
 501,1250000,1000000,250000;
+=======
+31-03-2024 21:00:29
+
+Sid,amount,base_salary,bonus;
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942

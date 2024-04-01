@@ -147,6 +147,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="include\Views\DeptView.cpp" />
+    <ClCompile Include="include\Views\EmpView.cpp" />
+    <ClCompile Include="include\Views\EngView.cpp" />
+    <ClCompile Include="include\Views\MangView.cpp" />
+    <ClCompile Include="include\Views\SalaryView.cpp" />
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite\shell.c" />
     <ClCompile Include="sqlite\sqlite3.c" />
@@ -177,11 +185,19 @@
     <ClInclude Include="include\Model\Salary.h" />
     <ClInclude Include="include\Model\Table.h" />
     <ClInclude Include="include\Regex.h" />
+<<<<<<< HEAD
     <ClInclude Include="include\controllers\departmentController.h" />
     <ClInclude Include="include\controllers\employeeController.h" />
     <ClInclude Include="include\controllers\engineerController.h" />
     <ClInclude Include="include\controllers\managerController.h" />
     <ClInclude Include="include\controllers\salaryController.h" />
+=======
+    <ClInclude Include="include\Views\DeptView.h" />
+    <ClInclude Include="include\Views\EmpView.h" />
+    <ClInclude Include="include\Views\EngView.h" />
+    <ClInclude Include="include\Views\MangView.h" />
+    <ClInclude Include="include\Views\SalaryView.h" />
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
   </ItemGroup>

@@ -1,5 +1,10 @@
 #include "../include/Model/Salary.h"
+<<<<<<< HEAD
 #include "../include/controllers/salaryController.h"
+=======
+#include "../include/Views/SalaryView.h"
+
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 double Model::Salary::increment(double percentage, int id) {
 	try {
@@ -31,7 +36,11 @@ bool Model::Salary::viewSalary() const {
 		system("cls");
 
 		std::string query;
+<<<<<<< HEAD
 		auto tmp = viewSalaryController();
+=======
+		auto tmp =  SalaryViewer();
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 		if (tmp.has_value()) {
 			auto& [field, value] = tmp.value();
@@ -79,8 +88,13 @@ bool Model::Salary::updateSalary() const {
 	try {
 		system("cls");
 
+<<<<<<< HEAD
 		//  for testing 
 		std::string select = "select * from Salary where Sid = " + std::to_string(getId()) + ";";
+=======
+		// Uncomment for testing 
+		/*std::string select = "select * from Salary where Sid = " + std::to_string(getId()) + ";";
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 		DB::Database::getInstance().selectQuery(select.c_str());
 
@@ -88,7 +102,21 @@ bool Model::Salary::updateSalary() const {
 			std::cout << "\x1b[33m Employee is not in database \x1b[0m\n";
 			waitMenu();
 			return false;
+		}*/
+
+		setAmount(base_salary + bonus);
+		std::string query = "update Salary set amount = " + std::to_string(amount) + "  , base_salary = " + std::to_string(base_salary) + " , bonus = " + std::to_string(bonus) + " where Sid = " + std::to_string(Sid) + "; ";
+		//std::cout << query << "\n";   
+
+		int rc = DB::Database::getInstance().executeQuery(query.c_str());
+		if (rc == 0) {
+			std::cout << "\x1b[32mSalary updated successfully\x1b[0m\n\n";
+			waitMenu();
+			logging::Info("Salary updated for Id: ", std::to_string(getId()));
+
+			return true;
 		}
+<<<<<<< HEAD
 
 		std::string query = "update Salary set amount = " + std::to_string(amount) + "  , base_salary = " + std::to_string(base_salary) + " , bonus = " + std::to_string(bonus) + " where Sid = " + std::to_string(Sid) + "; ";
 		//std::cout << query << "\n";   
@@ -101,6 +129,8 @@ bool Model::Salary::updateSalary() const {
 
 			return true;
 		}
+=======
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 		return false;
 
 	}

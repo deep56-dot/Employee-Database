@@ -35,7 +35,10 @@ namespace DB {
 		bool close();
 		int executeQuery(const char* sql, float count = 0);
 		bool selectQuery(const char* sql);
+<<<<<<< HEAD
 		bool selectQueryForChecking(const char* sql);
+=======
+>>>>>>> 17217775496b21dd86a60f626a1c9ac79568d942
 
 		static Database& getInstance() {
 			static Database db;
